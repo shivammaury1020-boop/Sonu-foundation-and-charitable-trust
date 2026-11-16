@@ -1,0 +1,192 @@
+{
+  "bookings": [
+    {
+      "id": "bk-c10d1c76-a540-4820-a2b3-4e2ff44f4416",
+      "booking_id": "SBS-20261113-4730",
+      "location_id": "location-2",
+      "location_name": "Sonu Foundation and Charitable Trust — Location 2",
+      "service_id": "eyebrow",
+      "service_name": "Eyebrow",
+      "appointment_date": "2026-11-28",
+      "appointment_time": "01:00 PM",
+      "customer_name": "Shivam Maurya",
+      "phone": "+917982765604",
+      "whatsapp_number": "+917982765604",
+      "email": "shivammaury1020@gmail.com",
+      "message": "",
+      "status": "Pending Confirmation",
+      "created_at": "2026-11-13T16:57:18.297Z",
+      "updated_at": "2026-11-13T16:57:18.297Z",
+      "storage_backend": "server-db",
+      "whatsapp_message_id": null,
+      "whatsapp_status": "Not Sent",
+      "whatsapp_timestamp": null,
+      "whatsapp_error": null,
+      "admin_notes": ""
+    },
+    {
+      "id": "bk-efb633f0-edcb-4c0a-9d71-92d65fb98f43",
+      "booking_id": "SBS-20261113-8976",
+      "location_id": "location-2",
+      "location_name": "Sonu Foundation and Charitable Trust — Location 2",
+      "service_id": "leg-wax",
+      "service_name": "Leg Wax",
+      "appointment_date": "2026-11-20",
+      "appointment_time": "03:30 PM",
+      "customer_name": "Shivam Maurya",
+      "phone": "+917982765604",
+      "whatsapp_number": "917982765604",
+      "email": "shivammaury1020@gmail.com",
+      "message": "",
+      "status": "Pending Confirmation",
+      "created_at": "2026-11-13T16:27:14.497Z",
+      "updated_at": "2026-11-13T16:27:14.497Z",
+      "storage_backend": "server-db",
+      "whatsapp_message_id": null,
+      "whatsapp_status": "Not Sent",
+      "whatsapp_timestamp": null,
+      "whatsapp_error": null,
+      "admin_notes": ""
+    },
+    {
+      "id": "bk-e9bf027e-ba46-4b54-9ed2-df20af6eadc2",
+      "booking_id": "SBS-20261113-6568",
+      "location_id": "location-1",
+      "location_name": "Sonu Foundation and Charitable Trust — Location 1",
+      "service_id": "forehead",
+      "service_name": "Forehead",
+      "appointment_date": "2026-11-13",
+      "appointment_time": "03:30 PM",
+      "customer_name": "Shivam Maurya",
+      "phone": "+917982765604",
+      "whatsapp_number": "+917982765604",
+      "email": "shivammaury1020@gmail.com",
+      "message": "",
+      "status": "Pending Confirmation",
+      "created_at": "2026-11-13T15:26:36.636Z",
+      "updated_at": "2026-11-13T15:26:36.636Z",
+      "storage_backend": "server-db",
+      "whatsapp_message_id": null,
+      "whatsapp_status": "Not Sent",
+      "whatsapp_timestamp": null,
+      "whatsapp_error": null,
+      "admin_notes": ""
+    },
+    {
+      "id": "bk-1d135403-c760-43d4-b351-611e467fb2a4",
+      "booking_id": "SBS-20261104-7241",
+      "location_id": "location-1",
+      "location_name": "Sonu’s Beauty Studio & Academy — Location 1",
+      "service_id": "bridal-makeup",
+      "service_name": "Bridal Makeup",
+      "appointment_date": "2026-12-10",
+      "appointment_time": "11:00 AM",
+      "customer_name": "Diya Sharma",
+      "phone": "9876543219",
+      "whatsapp_number": "9876543219",
+      "email": "diya@example.com",
+      "message": "Bridal HD Makeup",
+      "status": "Confirmed",
+      "created_at": "2026-11-04T09:24:17.831Z",
+      "updated_at": "2026-11-04T09:25:34.181Z",
+      "storage_backend": "server-db",
+      "whatsapp_message_id": null,
+      "whatsapp_status": "Not Configured",
+      "whatsapp_timestamp": "2026-11-04T09:25:34.181Z",
+      "whatsapp_error": "WhatsApp Business Cloud API is not configured. Set WHATSAPP_CLOUD_API_TOKEN and WHATSAPP_PHONE_NUMBER_ID in server environment variables.",
+      "admin_notes": "Confirmed by studio administrator via Admin Dashboard."
+    }
+  ],
+  "booking_status_history": [
+    {
+      "id": "hist-e8d3c343-3969-435d-a23e-bc0feff40529",
+      "booking_id": "SBS-20261113-4730",
+      "previous_status": null,
+      "new_status": "Pending Confirmation",
+      "changed_by": "Customer Online Request",
+      "notes": "Appointment requested for Eyebrow at Sonu Foundation and Charitable Trust — Location 2 (2026-11-28 01:00 PM IST).",
+      "whatsapp_status": "Not Sent",
+      "created_at": "2026-11-13T16:57:18.297Z"
+    },
+    {
+      "id": "hist-f207dcb5-150f-408c-b334-a32557d80cc8",
+      "booking_id": "SBS-20261113-8976",
+      "previous_status": null,
+      "new_status": "Pending Confirmation",
+      "changed_by": "Customer Online Request",
+      "notes": "Appointment requested for Leg Wax at Sonu Foundation and Charitable Trust — Location 2 (2026-11-20 03:30 PM IST).",
+      "whatsapp_status": "Not Sent",
+      "created_at": "2026-11-13T16:27:14.497Z"
+    },
+    {
+      "id": "hist-cb768337-7dee-4481-9d65-0723dfd2132f",
+      "booking_id": "SBS-20261113-6568",
+      "previous_status": null,
+      "new_status": "Pending Confirmation",
+      "changed_by": "Customer Online Request",
+      "notes": "Appointment requested for Forehead at Sonu Foundation and Charitable Trust — Location 1 (2026-11-13 03:30 PM IST).",
+      "whatsapp_status": "Not Sent",
+      "created_at": "2026-11-13T15:26:36.636Z"
+    },
+    {
+      "id": "hist-96cfcd06-b6fb-48de-8332-745b69179e80",
+      "booking_id": "SBS-20261104-7241",
+      "previous_status": "Pending Confirmation",
+      "new_status": "Confirmed",
+      "changed_by": "admin@sonusbeautystudio.com",
+      "notes": "Confirmed by studio administrator via Admin Dashboard.",
+      "whatsapp_status": "Not Configured",
+      "created_at": "2026-11-04T09:25:34.181Z"
+    },
+    {
+      "id": "hist-6d919530-9745-4db9-90fe-db223ac7f33c",
+      "booking_id": "SBS-20261104-7241",
+      "previous_status": null,
+      "new_status": "Pending Confirmation",
+      "changed_by": "Customer Online Request",
+      "notes": "Appointment requested for Bridal Makeup at Sonu’s Beauty Studio & Academy — Location 1 (2026-12-10 11:00 AM IST).",
+      "whatsapp_status": "Not Sent",
+      "created_at": "2026-11-04T09:24:17.831Z"
+    }
+  ],
+  "blocked_dates": [],
+  "course_enquiries": [
+    {
+      "id": "enq-2f50bfbe-9caf-420e-ad6e-f7527d4fcabc",
+      "enquiry_id": "ENQ-20261104-4817",
+      "name": "Aarti Joshi",
+      "phone": "9898989898",
+      "whatsapp": "9898989898",
+      "email": "aarti@example.com",
+      "course": "Makeup Course",
+      "preferred_location": "Location 1",
+      "message": "Next batch date?",
+      "status": "Received",
+      "created_at": "2026-11-04T09:24:29.263Z",
+      "storage_backend": "server-db"
+    }
+  ],
+  "contact_messages": [
+    {
+      "id": "msg-a7e07378-edd1-4bf9-a5ea-d1d03f5769bf",
+      "reference_id": "MSG-20261104-6179",
+      "name": "Nidhi Shah",
+      "phone": "9797979797",
+      "email": "nidhi@example.com",
+      "message": "Do you have group bridal packages?",
+      "status": "Received",
+      "created_at": "2026-11-04T09:24:17.887Z",
+      "storage_backend": "server-db"
+    }
+  ],
+  "admin_users": [
+    {
+      "id": "admin-default-1",
+      "email": "admin@sonusbeautystudio.com",
+      "name": "Sonu’s Studio Administrator",
+      "password_hash": "scrypt$15bc1182a4033070f91ba9cf9c5c6c8e$e9bd22fa6d47b4674642269efa3c63ff22f11ea4ef91bc39be46a3251543a03b1f73693aa34a4cffc01eb723f75c1a1d9c707dbd2a286dc45530894767d761b1",
+      "role": "super_admin",
+      "created_at": "2026-11-04T09:24:17.830Z"
+    }
+  ]
+}

@@ -1,0 +1,253 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --color-burgundy: #6B173D;
+    --color-burgundy-dark: #4A0D29;
+    --color-cream: #FAF5EF;
+    --color-beige: #F3E9DF;
+    --color-gold: #C8A15A;
+    --color-gold-light: #E6C98F;
+    --color-text-dark: #201B1D;
+    --color-text-muted: #6E6265;
+  }
+
+  body {
+    font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    background-color: #FAF5EF;
+    color: #201B1D;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3, h4, .font-serif-luxury, .brand-wordmark-line {
+    font-family: 'Playfair Display', 'Cormorant Garamond', Georgia, serif;
+  }
+
+  .font-editorial {
+    font-family: 'Cormorant Garamond', 'Playfair Display', Georgia, serif;
+  }
+}
+
+@layer components {
+  .brand-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-left: 0.2rem;
+    min-width: 0;
+    max-width: min(100%, 22rem);
+    flex: 0 1 auto;
+    overflow: hidden;
+  }
+
+  .brand-logo-mark {
+    width: 4rem;
+    height: 4rem;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+  }
+
+  .brand-logo-image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
+    display: block;
+    background: transparent;
+  }
+
+  @media (min-width: 640px) {
+    .brand-logo-mark {
+      width: 4.5rem;
+      height: 4.5rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .brand-logo-mark {
+      width: 4.75rem;
+      height: 4.75rem;
+    }
+  }
+
+  .brand-wordmark {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-width: 0;
+    max-width: 18.5rem;
+    width: min(100%, 18.5rem);
+    line-height: 0.9;
+    flex: 1 1 auto;
+    color: var(--color-burgundy);
+  }
+
+  .brand-wordmark-line {
+    display: block;
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: var(--color-burgundy);
+  }
+
+  .brand-wordmark-primary {
+    font-size: clamp(1rem, 1.05vw, 1.45rem);
+    line-height: 1.05;
+  }
+
+  .brand-wordmark-secondary {
+    font-size: clamp(0.76rem, 0.8vw, 1.05rem);
+    line-height: 1.08;
+  }
+
+  .brand-tagline {
+    display: block;
+    margin-top: 0.35rem;
+    width: 100%;
+    max-width: 16.5rem;
+    font-size: clamp(0.42rem, 0.5vw, 0.64rem);
+    line-height: 1.3;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    font-weight: 700;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  @media (max-width: 1023px) {
+    .brand-wordmark {
+      max-width: 15rem;
+      width: min(100%, 15rem);
+    }
+  }
+
+  @media (max-width: 639px) {
+    .brand-logo {
+      gap: 0.5rem;
+      max-width: calc(100vw - 7rem);
+    }
+
+    .brand-logo-mark {
+      width: 2.8rem;
+      height: 2.8rem;
+      flex-shrink: 0;
+    }
+
+    .brand-wordmark {
+      max-width: none;
+      width: auto;
+      flex: 1 1 auto;
+      min-width: 0;
+    }
+
+    .brand-wordmark-line,
+    .brand-tagline {
+      white-space: nowrap;
+    }
+
+    .brand-wordmark-primary {
+      font-size: 0.96rem;
+      line-height: 1.05;
+    }
+
+    .brand-wordmark-secondary {
+      font-size: 0.72rem;
+      line-height: 1.1;
+    }
+
+    .brand-tagline {
+      letter-spacing: 0.09em;
+      font-size: 0.42rem;
+      margin-top: 0.2rem;
+    }
+  }
+
+  .footer-section-heading {
+    font-family: 'Playfair Display', 'Cormorant Garamond', Georgia, serif;
+    font-size: clamp(1.05rem, 0.9vw, 1.45rem);
+    line-height: 1.3;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+  }
+
+  .footer-link-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .footer-nav-link {
+    display: inline-block;
+    width: auto;
+    max-width: 100%;
+    font-size: clamp(0.97rem, 0.78vw, 1.12rem);
+    line-height: 1.6;
+    font-weight: 600;
+    color: rgba(250, 245, 239, 0.85);
+    text-align: left;
+    letter-spacing: 0.01em;
+  }
+
+  @media (max-width: 1023px) {
+    .footer-section-heading {
+      font-size: 1.18rem;
+    }
+
+    .footer-nav-link {
+      font-size: 0.98rem;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .footer-section-heading {
+      font-size: 1.08rem;
+    }
+
+    .footer-nav-link {
+      font-size: 0.96rem;
+      line-height: 1.55;
+    }
+  }
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-up {
+  animation: fadeUp 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Custom subtle gold divider ornament */
+.gold-ornament-line {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #C8A15A, transparent);
+}
+
