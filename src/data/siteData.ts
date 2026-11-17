@@ -161,10 +161,11 @@ export const BUSINESS_CLAIMS_CONFIG: BusinessClaimsConfig = {
 
 /**
  * Central Business Email Configuration.
- * Update this single constant (or set VITE_BUSINESS_EMAIL in .env) once the client provides the verified email.
- * Kept empty until confirmed so no incorrect or assumed email address is displayed.
+ * Update this single constant (or set VITE_BUSINESS_EMAIL in .env) to change the displayed business email site-wide.
  */
-export const BUSINESS_EMAIL: string = (envMeta.VITE_BUSINESS_EMAIL || '').trim();
+export const BUSINESS_EMAIL: string = (
+  envMeta.VITE_BUSINESS_EMAIL || 'Sonaljinger@gmil.com'
+).trim();
 
 export const OWNER_PROFILE = {
   name: 'Sonal Jingar',

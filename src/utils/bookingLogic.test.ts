@@ -488,8 +488,9 @@ test('11. OFFICIAL_SOCIAL_PROFILES and SOCIAL_MEDIA_URLS expose all five configu
   );
 });
 
-test('12. Central BUSINESS_EMAIL removes incorrect address and OWNER_PROFILE configures Founder & Owner portrait', () => {
+test('12. Central BUSINESS_EMAIL configures Sonaljinger@gmil.com and OWNER_PROFILE configures Founder & Owner portrait', () => {
   assert.equal(BUSINESS_INFO.email, BUSINESS_EMAIL);
+  assert.equal(BUSINESS_EMAIL, 'Sonaljinger@gmil.com');
   assert.notEqual(BUSINESS_EMAIL.toLowerCase(), 'sonusbeautystudio@gmail.com');
   assert.equal(OWNER_PROFILE.designation, 'Founder & Owner');
   assert.equal(
