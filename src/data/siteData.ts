@@ -170,11 +170,12 @@ export const BUSINESS_EMAIL: string = (
 export const OWNER_PROFILE = {
   name: 'Sonal Jingar',
   designation: 'Founder & Owner',
+  proprietorDesignation: 'Founder & Proprietor',
   organization: 'Sonu’s Beauty Studio & Academy · Sonu Foundation & Charitable Trust',
   photoUrl:
     '/assets/aistudio/3e494f118bb00ce44c2be67d6cc7077694a072aadf0740a7743eb762bb7caec3_c1cf6611.png',
   photoAlt:
-    'Sonal Jingar, Founder and Owner of Sonu’s Beauty Studio & Academy and Sonu Foundation and Charitable Trust in Vadodara',
+    'Sonal Jingar, Founder and Proprietor of Sonu’s Beauty Studio & Academy and Sonu Foundation and Charitable Trust in Vadodara',
   summary:
     'Guiding bridal artistry, studio beauty services, and hands-on certified beauty academy training in Vadodara.',
 };
@@ -312,7 +313,7 @@ export const OFFICIAL_SOCIAL_PROFILES: SocialProfileLink[] = [
 
 /**
  * Location Schema:
- * - Branch 1 (Waghodia Road): 22.3050800, 73.2103810 -> https://maps.app.goo.gl/8iDEKRoQgect3CMWA
+ * - Branch 1 (Somatalav, Waghodia Road): 22.280752, 73.230896 -> https://www.google.com/maps?q=22.280752,73.230896
  * - Branch 2 (Adaniyapul, Fatepura): 22.3104840, 73.2442090 -> https://maps.app.goo.gl/3CzRKX4UssDLeFaEA
  */
 export function resolveLocation2AddressLines(): string[] {
@@ -325,21 +326,20 @@ export function resolveLocation2AddressLines(): string[] {
 export const LOCATIONS: LocationItem[] = [
   {
     id: 'location-1',
-    name: 'Sonu’s Beauty Studio & Academy – Waghodia Road',
-    shortLabel: 'Branch 1: Waghodia Road (Somatalav Char Rasta, Vadodara)',
+    name: 'Sonu’s Beauty Studio & Academy – Somatalav',
+    shortLabel: 'Branch 1: Somatalav, Waghodia Road, Vadodara',
     addressLines: [
-      'FF-26, Uma Nagar, Opposite Nayara Petrol Pump,',
-      'Near Somatalav Char Rasta, Waghodia–Dabhoi Ring Road,',
-      'Vadodara, Gujarat – 390025.',
+      'Somatalav, Waghodia Road,',
+      'Vadodara, Gujarat.',
     ],
-    cityState: 'Vadodara, Gujarat – 390025',
+    cityState: 'Vadodara, Gujarat',
     phone: '+91 79902 34736',
-    coordinates: '22.3050800, 73.2103810',
-    mapsUrl: 'https://maps.app.goo.gl/8iDEKRoQgect3CMWA',
+    coordinates: '22.280752, 73.230896',
+    mapsUrl: 'https://www.google.com/maps?q=22.280752,73.230896',
     mapEmbedUrl:
-      'https://maps.google.com/maps?q=22.3050800,73.2103810&t=&z=16&ie=UTF8&iwloc=&output=embed',
+      'https://maps.google.com/maps?q=22.280752,73.230896&t=&z=16&ie=UTF8&iwloc=&output=embed',
     hours: 'Mon – Sun : 10:00 AM – 8:00 PM',
-    badge: 'Branch 1 • Waghodia Road',
+    badge: 'Branch 1 • Somatalav, Waghodia Road',
     schemaType: 'street-address',
   },
   {
@@ -1922,7 +1922,7 @@ export const GALLERY_ITEMS: GalleryItem[] = [
   {
     id: 'gal-video-6',
     title: 'Studio Tour & Basic to Advance Courses Reel',
-    subtitle: 'Full tour of Sonu’s Beauty Studio & Academy (FF-26, Uma Nagar) featuring live training & government certification',
+    subtitle: 'Full tour of Sonu’s Beauty Studio & Academy (Somatalav, Waghodia Road) featuring live training & government certification',
     category: 'Videos',
     src: '/assets/aistudio/7_25ba3f99.jpeg',
     videoSrc: '/assets/aistudio/WhatsApp_Video_2026-11-12_at_11.46.20_PM_bed0012e.mp4',

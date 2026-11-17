@@ -255,7 +255,7 @@ export const BookAppointmentPageView: React.FC<BookingViewProps> = ({
                   Select Your Preferred Branch
                 </h2>
                 <p className="text-xs sm:text-sm text-[#6E6265]">
-                  Choose Branch 1 (Waghodia Road) or Branch 2 (Adaniyapul, Fatepura) in Vadodara for your appointment.
+                  Choose Branch 1 (Somatalav, Waghodia Road) or Branch 2 (Adaniyapul, Fatepura) in Vadodara for your appointment.
                 </p>
               </div>
 

@@ -122,6 +122,58 @@ export const AboutPageView: React.FC<PageNavProps> = ({ onNavigate }) => {
         </div>
       </section>
 
+      {/* Founder & Proprietor Portrait Section */}
+      <section aria-labelledby="about-founder-heading" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="bg-white rounded-3xl border border-[#C8A15A]/45 shadow-md overflow-hidden grid grid-cols-1 lg:grid-cols-12 items-center">
+          <div className="lg:col-span-5 bg-[#EFE6DC]">
+            <div className="aspect-[4/4] sm:aspect-[4/3] lg:aspect-[4/4] w-full overflow-hidden">
+              <img
+                src={OWNER_PROFILE.photoUrl}
+                alt={OWNER_PROFILE.photoAlt}
+                referrerPolicy="no-referrer"
+                className="w-full h-full object-cover object-top"
+              />
+            </div>
+          </div>
+
+          <div className="lg:col-span-7 p-6 sm:p-10 space-y-4">
+            <span className="inline-block text-xs font-bold tracking-[0.18em] uppercase text-[#6B173D] bg-[#FAF5EF] px-3 py-1 rounded-lg border border-[#C8A15A]/40">
+              {OWNER_PROFILE.proprietorDesignation}
+            </span>
+            <h2
+              id="about-founder-heading"
+              className="font-serif-luxury text-3xl sm:text-4xl font-bold text-[#201B1D]"
+            >
+              {OWNER_PROFILE.name}
+            </h2>
+            <p className="text-sm font-semibold text-[#6E6265]">
+              {OWNER_PROFILE.organization}
+            </p>
+            <p className="text-sm sm:text-base text-[#201B1D]/85 leading-relaxed">
+              {OWNER_PROFILE.summary} Under her leadership, students and clients receive personal attention across both our Somatalav (Waghodia Road) and Adaniyapul (Fatepura) branches in Vadodara.
+            </p>
+            <div className="flex flex-wrap items-center gap-3 pt-2">
+              <button
+                type="button"
+                onClick={() => onNavigate('book')}
+                className="inline-flex items-center gap-2 bg-[#6B173D] hover:bg-[#4A0D29] text-white text-sm font-semibold px-5 py-3 rounded-xl shadow-sm transition-colors cursor-pointer"
+              >
+                <Calendar className="w-4 h-4 text-[#E6C98F]" />
+                <span>Book Appointment</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => onNavigate('contact')}
+                className="inline-flex items-center gap-2 bg-[#FAF5EF] hover:bg-[#F3E9DF] text-[#4A0D29] border border-[#C8A15A]/50 text-sm font-semibold px-5 py-3 rounded-xl transition-colors cursor-pointer"
+              >
+                <Phone className="w-4 h-4 text-[#6B173D]" />
+                <span>Contact Studio</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Core Pillars */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="bg-[#F6EFE7] rounded-3xl p-6 sm:p-10 border border-[#C8A15A]/35 grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -541,7 +593,7 @@ export const LocationsPageView: React.FC<PageNavProps> = ({
             Our Locations
           </h1>
           <p className="text-sm sm:text-base text-[#6E6265]">
-            Visit either of our Sonu’s Beauty Studio &amp; Academy branches in Vadodara for salon treatments or academy admissions. Branch 1 (Waghodia Road) and Branch 2 (Adaniyapul, Fatepura) are separate branches.
+            Visit either of our Sonu’s Beauty Studio &amp; Academy branches in Vadodara for salon treatments or academy admissions. Branch 1 (Somatalav, Waghodia Road) and Branch 2 (Adaniyapul, Fatepura) are separate branches.
           </p>
         </div>
 

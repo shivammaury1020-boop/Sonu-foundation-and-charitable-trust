@@ -28,6 +28,7 @@ import {
   GALLERY_ITEMS,
   GalleryCategory,
   LOCATIONS,
+  OWNER_PROFILE,
   PageId,
   SERVICES,
   TIME_SLOTS,
@@ -401,6 +402,49 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate, onQuickBookStart
               </div>
             </div>
           </div>
+
+          {/* Founder & Proprietor Showcase Card */}
+          <div className="mt-7 bg-[#FAF5EF] rounded-2xl border border-[#C8A15A]/45 shadow-sm overflow-hidden grid grid-cols-1 md:grid-cols-12 items-center">
+            <div className="md:col-span-4 lg:col-span-3 bg-[#EFE6DC]">
+              <div className="aspect-[4/4] md:aspect-[4/3] w-full overflow-hidden">
+                <img
+                  src={OWNER_PROFILE.photoUrl}
+                  alt={OWNER_PROFILE.photoAlt}
+                  loading="lazy"
+                  referrerPolicy="no-referrer"
+                  className="w-full h-full object-cover object-top"
+                />
+              </div>
+            </div>
+
+            <div className="md:col-span-8 lg:col-span-9 p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div className="space-y-1.5">
+                <span className="inline-block text-[11px] font-bold tracking-[0.16em] uppercase text-[#6B173D] bg-white px-2.5 py-1 rounded-md border border-[#C8A15A]/40">
+                  {OWNER_PROFILE.proprietorDesignation}
+                </span>
+                <h3 className="font-serif-luxury text-xl sm:text-2xl font-bold text-[#201B1D]">
+                  {OWNER_PROFILE.name}
+                </h3>
+                <p className="text-xs font-semibold text-[#6E6265]">
+                  {OWNER_PROFILE.organization}
+                </p>
+                <p className="text-xs sm:text-sm text-[#201B1D]/80 leading-relaxed max-w-2xl">
+                  {OWNER_PROFILE.summary}
+                </p>
+              </div>
+
+              <div className="shrink-0">
+                <button
+                  type="button"
+                  onClick={() => onNavigate('about')}
+                  className="inline-flex items-center gap-2 bg-[#6B173D] hover:bg-[#4A0D29] text-white text-xs sm:text-sm font-semibold px-4 py-2.5 rounded-xl shadow-sm transition-colors cursor-pointer whitespace-nowrap"
+                >
+                  <span>Meet the Founder</span>
+                  <ArrowRight className="w-4 h-4 text-[#E6C98F]" />
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -584,7 +628,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate, onQuickBookStart
                             : 'bg-white/10 text-white border-white/25 hover:bg-white/15'
                         }`}
                       >
-                        Branch {idx + 1}: {idx === 0 ? 'Waghodia Road' : 'Adaniyapul, Fatepura'}
+                        Branch {idx + 1}: {idx === 0 ? 'Somatalav, Waghodia Rd' : 'Adaniyapul, Fatepura'}
                       </button>
                     ))}
                   </div>
@@ -758,7 +802,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate, onQuickBookStart
               Our Locations
             </h2>
             <p className="text-sm sm:text-base text-[#6E6265] mt-1.5">
-              Conveniently serving clients and academy students across Branch 1 (Waghodia Road) and Branch 2 (Adaniyapul, Fatepura) in Vadodara, Gujarat.
+              Conveniently serving clients and academy students across Branch 1 (Somatalav, Waghodia Road) and Branch 2 (Adaniyapul, Fatepura) in Vadodara, Gujarat.
             </p>
           </div>
 

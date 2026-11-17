@@ -1327,7 +1327,7 @@ export const AdminDashboardView: React.FC<{
                     className="w-full rounded-xl border border-[#C8A15A]/50 bg-[#FAF5EF] px-3 py-2 text-xs sm:text-sm text-[#201B1D]"
                   >
                     <option value="all">Both Vadodara Locations</option>
-                    <option value="location-1">Branch 1 — Waghodia Road</option>
+                    <option value="location-1">Branch 1 — Somatalav, Waghodia Road</option>
                     <option value="location-2">Branch 2 — Adaniyapul, Fatepura</option>
                   </select>
                 </div>
@@ -1401,7 +1401,7 @@ export const AdminDashboardView: React.FC<{
                           {bd.location_id === 'all'
                             ? 'All Locations'
                             : bd.location_id === 'location-1'
-                            ? 'Branch 1 · Waghodia Road'
+                            ? 'Branch 1 · Somatalav, Waghodia Road'
                             : 'Branch 2 · Adaniyapul, Fatepura'}
                         </span>
                         <div className="text-xs text-[#6E6265]">{bd.reason}</div>

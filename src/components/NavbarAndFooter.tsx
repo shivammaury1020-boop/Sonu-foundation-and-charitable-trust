@@ -591,7 +591,7 @@ export const LuxuryFooter: React.FC<{
               <li className="flex items-start gap-2.5">
                 <MapPin className="w-4 h-4 text-[#C8A15A] shrink-0 mt-1" />
                 <div>
-                  <span className="block text-xs text-[#E6C98F] font-medium">Branch 1 · Waghodia Road</span>
+                  <span className="block text-xs text-[#E6C98F] font-medium">Branch 1 · Somatalav, Waghodia Road</span>
                   <span>{LOCATIONS[0].addressLines.join(' ')}</span>
                 </div>
               </li>

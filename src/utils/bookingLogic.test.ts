@@ -168,14 +168,13 @@ test('7. siteData contains all 36 actual client services, 9 academy courses, and
   assert.equal(COURSES.length, 9);
   assert.equal(LOCATIONS.length, 2);
 
-  // Branch 1 – Waghodia Road
-  assert.equal(LOCATIONS[0].name, 'Sonu’s Beauty Studio & Academy – Waghodia Road');
-  assert.equal(LOCATIONS[0].coordinates, '22.3050800, 73.2103810');
-  assert.equal(LOCATIONS[0].mapsUrl, 'https://maps.app.goo.gl/8iDEKRoQgect3CMWA');
+  // Branch 1 – Somatalav, Waghodia Road
+  assert.equal(LOCATIONS[0].name, 'Sonu’s Beauty Studio & Academy – Somatalav');
+  assert.equal(LOCATIONS[0].coordinates, '22.280752, 73.230896');
+  assert.equal(LOCATIONS[0].mapsUrl, 'https://www.google.com/maps?q=22.280752,73.230896');
   const loc1Addr = LOCATIONS[0].addressLines.join(' ');
-  assert.equal(loc1Addr.includes('FF-26, Uma Nagar'), true);
-  assert.equal(loc1Addr.includes('Opposite Nayara Petrol Pump'), true);
-  assert.equal(loc1Addr.includes('390025'), true);
+  assert.equal(loc1Addr.includes('Somatalav, Waghodia Road'), true);
+  assert.equal(loc1Addr.includes('FF-26'), false);
 
   // Branch 2 – Adaniyapul, Fatepura
   assert.equal(LOCATIONS[1].name, 'Sonu’s Beauty Studio & Academy – Adaniyapul, Fatepura');
@@ -187,7 +186,7 @@ test('7. siteData contains all 36 actual client services, 9 academy courses, and
 
   // Ensure the two branches never share or mix map embed URLs or links
   assert.notEqual(LOCATIONS[0].mapEmbedUrl, LOCATIONS[1].mapEmbedUrl);
-  assert.equal(LOCATIONS[0].mapEmbedUrl.includes('22.3050800,73.2103810'), true);
+  assert.equal(LOCATIONS[0].mapEmbedUrl.includes('22.280752,73.230896'), true);
   assert.equal(LOCATIONS[1].mapEmbedUrl.includes('22.3104840,73.2442090'), true);
   assert.notEqual(LOCATIONS[0].mapsUrl, LOCATIONS[1].mapsUrl);
 
@@ -273,7 +272,7 @@ test('9. Full workflow: slot protection, race-condition locking, admin confirm, 
     assert.equal(resB.status, 409); // Second concurrent booking blocked by mutex + slot protection!
     assert.ok(resA.booking);
     assert.equal(resA.booking.location_id, 'location-1');
-    assert.equal(resA.booking.location_name, 'Sonu’s Beauty Studio & Academy – Waghodia Road');
+    assert.equal(resA.booking.location_name, 'Sonu’s Beauty Studio & Academy – Somatalav');
 
     // Booking at Branch 2 (Adaniyapul, Fatepura) at the same date & time is allowed as a separate branch and stores exact branch name
     const resBranch2 = await createBookingRecord(
@@ -533,11 +532,13 @@ test('11. OFFICIAL_SOCIAL_PROFILES and SOCIAL_MEDIA_URLS expose all five configu
   );
 });
 
-test('12. Central BUSINESS_EMAIL configures Sonaljinger@gmil.com and OWNER_PROFILE configures Founder & Owner portrait', () => {
+test('12. Central BUSINESS_EMAIL configures Sonaljinger@gmil.com and OWNER_PROFILE configures Founder & Owner / Proprietor portrait', () => {
   assert.equal(BUSINESS_INFO.email, BUSINESS_EMAIL);
   assert.equal(BUSINESS_EMAIL, 'Sonaljinger@gmil.com');
   assert.notEqual(BUSINESS_EMAIL.toLowerCase(), 'sonusbeautystudio@gmail.com');
+  assert.equal(OWNER_PROFILE.name, 'Sonal Jingar');
   assert.equal(OWNER_PROFILE.designation, 'Founder & Owner');
+  assert.equal(OWNER_PROFILE.proprietorDesignation, 'Founder & Proprietor');
   assert.equal(
     OWNER_PROFILE.photoUrl,
     '/assets/aistudio/3e494f118bb00ce44c2be67d6cc7077694a072aadf0740a7743eb762bb7caec3_c1cf6611.png'
