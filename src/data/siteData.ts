@@ -312,48 +312,50 @@ export const OFFICIAL_SOCIAL_PROFILES: SocialProfileLink[] = [
 
 /**
  * Location Schema:
- * - Location 1 uses verified street address only (never mixed with Location 2 GPS coordinates).
- * - Location 2 uses exact GPS coordinates (22.305021, 73.210297) without inventing an unverified street address.
+ * - Branch 1 (Waghodia Road): 22.3050800, 73.2103810 -> https://maps.app.goo.gl/8iDEKRoQgect3CMWA
+ * - Branch 2 (Adaniyapul, Fatepura): 22.3104840, 73.2442090 -> https://maps.app.goo.gl/3CzRKX4UssDLeFaEA
  */
+export function resolveLocation2AddressLines(): string[] {
+  return [
+    'Adaniyapul, Fatepura,',
+    'Vadodara, Gujarat – 390006.',
+  ];
+}
+
 export const LOCATIONS: LocationItem[] = [
   {
     id: 'location-1',
-    name: 'Sonu Foundation and Charitable Trust — Location 1',
-    shortLabel: 'Location 1 (Dabhoi-Waghodia Ring Road, Vadodara)',
+    name: 'Sonu’s Beauty Studio & Academy – Waghodia Road',
+    shortLabel: 'Branch 1: Waghodia Road (Somatalav Char Rasta, Vadodara)',
     addressLines: [
-      'FF-26, Dabhoi-Waghodia Ring Road,',
-      'Opp. Nayra Petrol Pump, Near Soma Talav Char Rasta,',
-      'Vadodara, Gujarat 390025',
+      'FF-26, Uma Nagar, Opposite Nayara Petrol Pump,',
+      'Near Somatalav Char Rasta, Waghodia–Dabhoi Ring Road,',
+      'Vadodara, Gujarat – 390025.',
     ],
-    cityState: 'Vadodara, Gujarat 390025',
+    cityState: 'Vadodara, Gujarat – 390025',
     phone: '+91 79902 34736',
-    mapsUrl:
-      'https://www.google.com/maps/search/?api=1&query=FF-26+Dabhoi-Waghodia+Ring+Road+Opp+Nayra+Petrol+Pump+Near+Soma+Talav+Char+Rasta+Vadodara+Gujarat+390025',
+    coordinates: '22.3050800, 73.2103810',
+    mapsUrl: 'https://maps.app.goo.gl/8iDEKRoQgect3CMWA',
     mapEmbedUrl:
-      'https://maps.google.com/maps?q=Soma%20Talav%20Char%20Rasta%20Dabhoi%20Waghodia%20Ring%20Road%20Vadodara%20390025&t=&z=15&ie=UTF8&iwloc=&output=embed',
+      'https://maps.google.com/maps?q=22.3050800,73.2103810&t=&z=16&ie=UTF8&iwloc=&output=embed',
     hours: 'Mon – Sun : 10:00 AM – 8:00 PM',
-    badge: 'Main Studio & Academy Campus',
+    badge: 'Branch 1 • Waghodia Road',
     schemaType: 'street-address',
   },
   {
     id: 'location-2',
-    name: 'Sonu Foundation and Charitable Trust — Location 2',
-    shortLabel: 'Location 2 (GPS: 22.305021, 73.210297 · Vadodara)',
-    addressLines: envMeta.VITE_LOCATION_2_ADDRESS
-      ? [envMeta.VITE_LOCATION_2_ADDRESS]
-      : [
-          'Verified Map Pin: 22.305021, 73.210297',
-          'Vadodara, Gujarat (Use Google Maps pin for exact turn-by-turn directions)',
-        ],
-    cityState: 'Vadodara, Gujarat',
-    phone: '+917990234736',
-    coordinates: '22.305021, 73.210297',
-    mapsUrl: 'https://www.google.com/maps?q=22.305021,73.210297',
+    name: 'Sonu’s Beauty Studio & Academy – Adaniyapul, Fatepura',
+    shortLabel: 'Branch 2: Adaniyapul, Fatepura (Vadodara)',
+    addressLines: resolveLocation2AddressLines(),
+    cityState: 'Vadodara, Gujarat – 390006',
+    phone: '+91 79902 34736',
+    coordinates: '22.3104840, 73.2442090',
+    mapsUrl: 'https://maps.app.goo.gl/3CzRKX4UssDLeFaEA',
     mapEmbedUrl:
-      'https://maps.google.com/maps?q=22.305021,73.210297&t=&z=16&ie=UTF8&iwloc=&output=embed',
+      'https://maps.google.com/maps?q=22.3104840,73.2442090&t=&z=16&ie=UTF8&iwloc=&output=embed',
     hours: 'Mon – Sun : 10:00 AM – 8:00 PM',
-    badge: 'Second Branch • GPS: 22.305021, 73.210297',
-    schemaType: 'gps-coordinates',
+    badge: 'Branch 2 • Adaniyapul, Fatepura',
+    schemaType: 'street-address',
   },
 ];
 

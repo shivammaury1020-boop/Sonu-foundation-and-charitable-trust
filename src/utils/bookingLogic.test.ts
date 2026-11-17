@@ -163,11 +163,34 @@ test('6. formatWhatsAppBookingMessage and buildWhatsAppBookingUrl use the offici
   assert.equal(url.startsWith(`https://wa.me/${BUSINESS_INFO.whatsappNumber}?text=`), true);
 });
 
-test('7. siteData contains all 36 actual client services, 9 academy courses, and separate Location 1 & Location 2 schema', () => {
+test('7. siteData contains all 36 actual client services, 9 academy courses, and separate Branch 1 & Branch 2 schema', () => {
   assert.equal(SERVICES.length, 36);
   assert.equal(COURSES.length, 9);
   assert.equal(LOCATIONS.length, 2);
-  assert.equal(LOCATIONS[1].coordinates, '22.305021, 73.210297');
+
+  // Branch 1 – Waghodia Road
+  assert.equal(LOCATIONS[0].name, 'Sonu’s Beauty Studio & Academy – Waghodia Road');
+  assert.equal(LOCATIONS[0].coordinates, '22.3050800, 73.2103810');
+  assert.equal(LOCATIONS[0].mapsUrl, 'https://maps.app.goo.gl/8iDEKRoQgect3CMWA');
+  const loc1Addr = LOCATIONS[0].addressLines.join(' ');
+  assert.equal(loc1Addr.includes('FF-26, Uma Nagar'), true);
+  assert.equal(loc1Addr.includes('Opposite Nayara Petrol Pump'), true);
+  assert.equal(loc1Addr.includes('390025'), true);
+
+  // Branch 2 – Adaniyapul, Fatepura
+  assert.equal(LOCATIONS[1].name, 'Sonu’s Beauty Studio & Academy – Adaniyapul, Fatepura');
+  assert.equal(LOCATIONS[1].coordinates, '22.3104840, 73.2442090');
+  assert.equal(LOCATIONS[1].mapsUrl, 'https://maps.app.goo.gl/3CzRKX4UssDLeFaEA');
+  const loc2Addr = LOCATIONS[1].addressLines.join(' ');
+  assert.equal(loc2Addr.includes('Adaniyapul, Fatepura'), true);
+  assert.equal(loc2Addr.includes('390006'), true);
+
+  // Ensure the two branches never share or mix map embed URLs or links
+  assert.notEqual(LOCATIONS[0].mapEmbedUrl, LOCATIONS[1].mapEmbedUrl);
+  assert.equal(LOCATIONS[0].mapEmbedUrl.includes('22.3050800,73.2103810'), true);
+  assert.equal(LOCATIONS[1].mapEmbedUrl.includes('22.3104840,73.2442090'), true);
+  assert.notEqual(LOCATIONS[0].mapsUrl, LOCATIONS[1].mapsUrl);
+
   const proposedNames = PROPOSED_PROGRAM_TRACKS.map((track) => track.name);
   assert.equal(proposedNames.includes('MS Word'), false);
   assert.equal(proposedNames.includes('MS Excel'), false);
@@ -249,6 +272,20 @@ test('9. Full workflow: slot protection, race-condition locking, admin confirm, 
     assert.equal(resA.status, 201);
     assert.equal(resB.status, 409); // Second concurrent booking blocked by mutex + slot protection!
     assert.ok(resA.booking);
+    assert.equal(resA.booking.location_id, 'location-1');
+    assert.equal(resA.booking.location_name, 'Sonu’s Beauty Studio & Academy – Waghodia Road');
+
+    // Booking at Branch 2 (Adaniyapul, Fatepura) at the same date & time is allowed as a separate branch and stores exact branch name
+    const resBranch2 = await createBookingRecord(
+      { ...bookingReqB, location_id: 'location-2' },
+      { dbFilePath: testDbFile, referenceDate: refDate }
+    );
+    assert.equal(resBranch2.status, 201);
+    assert.equal(resBranch2.booking?.location_id, 'location-2');
+    assert.equal(
+      resBranch2.booking?.location_name,
+      'Sonu’s Beauty Studio & Academy – Adaniyapul, Fatepura'
+    );
 
     const createdBookingId = resA.booking.booking_id;
 
@@ -393,10 +430,18 @@ test('9. Full workflow: slot protection, race-condition locking, admin confirm, 
     );
     assert.equal(msg.status, 201);
 
-    // 10. Verify status history audit trail count
+    // 10. Verify status history audit trail count & persisted branch bookings
     const dash = await getAdminDashboardData({ dbFilePath: testDbFile });
-    assert.equal(dash.stats.totalBookings, 1);
+    assert.equal(dash.stats.totalBookings, 2);
     assert.equal(dash.stats.rejectedBookings, 1);
+    assert.equal(
+      dash.bookings.some(
+        (b) =>
+          b.location_id === 'location-2' &&
+          b.location_name === 'Sonu’s Beauty Studio & Academy – Adaniyapul, Fatepura'
+      ),
+      true
+    );
     assert.equal(dash.statusHistory.length >= 5, true);
   } finally {
     fs.rmSync(tmpDir, { recursive: true, force: true });

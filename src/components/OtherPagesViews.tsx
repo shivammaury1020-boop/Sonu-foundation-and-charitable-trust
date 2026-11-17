@@ -541,7 +541,7 @@ export const LocationsPageView: React.FC<PageNavProps> = ({
             Our Locations
           </h1>
           <p className="text-sm sm:text-base text-[#6E6265]">
-            Visit either of our Sonu’s Beauty Studio &amp; Academy branches in Vadodara for salon treatments or academy admissions. Location 1 (Dabhoi-Waghodia Ring Road) and Location 2 (GPS: 22.305021, 73.210297) are separate branches.
+            Visit either of our Sonu’s Beauty Studio &amp; Academy branches in Vadodara for salon treatments or academy admissions. Branch 1 (Waghodia Road) and Branch 2 (Adaniyapul, Fatepura) are separate branches.
           </p>
         </div>
 
@@ -552,7 +552,7 @@ export const LocationsPageView: React.FC<PageNavProps> = ({
               className="bg-white rounded-3xl border border-[#C8A15A]/45 shadow-md overflow-hidden flex flex-col justify-between"
             >
               <div className="p-6 sm:p-8 space-y-4">
-                <div className="flex items-center justify-between gap-2 text-xs font-bold uppercase tracking-wider text-[#6B173D]">
+                <div className="flex flex-wrap items-center justify-between gap-2 text-xs font-bold uppercase tracking-wider text-[#6B173D]">
                   <span>{loc.badge}</span>
                   {loc.coordinates && (
                     <span className="tabular-nums bg-[#FAF5EF] px-2.5 py-1 rounded-md border border-[#C8A15A]/35">
@@ -564,7 +564,7 @@ export const LocationsPageView: React.FC<PageNavProps> = ({
                   {loc.name}
                 </h2>
                 <div className="space-y-2 text-sm text-[#6E6265]">
-                  <div className="flex items-start gap-2.5">
+                  <div className="flex items-start gap-2.5 min-h-[60px]">
                     <MapPin className="w-4 h-4 text-[#6B173D] shrink-0 mt-1" />
                     <div>
                       {loc.addressLines.map((line, i) => (
@@ -625,7 +625,7 @@ export const LocationsPageView: React.FC<PageNavProps> = ({
                   className="inline-flex items-center gap-2 bg-white hover:bg-[#F3E9DF] text-[#6B173D] border border-[#6B173D]/40 text-xs sm:text-sm font-semibold px-5 py-3 rounded-xl transition-colors cursor-pointer"
                 >
                   <Calendar className="w-4 h-4" />
-                  <span>Book at {loc.id === 'location-1' ? 'Location 1' : 'Location 2'}</span>
+                  <span>Book at {loc.id === 'location-1' ? 'Branch 1' : 'Branch 2'}</span>
                 </button>
               </div>
             </div>
@@ -959,6 +959,7 @@ export const ContactPageView: React.FC<{
                     <button
                       key={loc.id}
                       type="button"
+                      aria-pressed={activeMapLocIndex === idx}
                       onClick={() => setActiveMapLocIndex(idx === 0 ? 0 : 1)}
                       className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors cursor-pointer whitespace-nowrap ${
                         activeMapLocIndex === idx
@@ -966,7 +967,7 @@ export const ContactPageView: React.FC<{
                           : 'text-[#4A0D29] hover:bg-[#F3E9DF]'
                       }`}
                     >
-                      Location {idx + 1}
+                      Branch {idx + 1}
                     </button>
                   ))}
                 </div>
@@ -975,13 +976,22 @@ export const ContactPageView: React.FC<{
               <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-stretch">
                 <div className="md:col-span-5 bg-[#FAF5EF] rounded-xl p-4 border border-[#C8A15A]/30 flex flex-col justify-between space-y-3">
                   <div className="space-y-1.5">
+                    <div className="text-[11px] font-bold uppercase tracking-wider text-[#6B173D]">
+                      {activeMapLocation.badge}
+                    </div>
                     <div className="font-serif-luxury text-base font-bold text-[#4A0D29]">
                       {activeMapLocation.name}
                     </div>
                     <p className="text-xs text-[#6E6265] leading-relaxed">
                       {activeMapLocation.addressLines.join(' ')}
                     </p>
-                    <p className="text-xs text-[#6E6265] pt-1">
+                    <p className="text-xs text-[#6E6265] pt-0.5 tabular-nums">
+                      <span className="font-semibold text-[#201B1D]">Phone:</span>{' '}
+                      <a href={`tel:${BUSINESS_INFO.phoneRaw}`} className="hover:text-[#6B173D]">
+                        {activeMapLocation.phone}
+                      </a>
+                    </p>
+                    <p className="text-xs text-[#6E6265]">
                       <span className="font-semibold text-[#201B1D]">Hours:</span> {activeMapLocation.hours}
                     </p>
                   </div>
@@ -1009,6 +1019,7 @@ export const ContactPageView: React.FC<{
 
                 <div className="md:col-span-7 rounded-xl overflow-hidden border border-[#C8A15A]/35 bg-[#F6EFE7] min-h-[210px]">
                   <iframe
+                    key={activeMapLocation.id}
                     src={activeMapLocation.mapEmbedUrl}
                     title={`Google Maps location for ${activeMapLocation.name}`}
                     loading="lazy"

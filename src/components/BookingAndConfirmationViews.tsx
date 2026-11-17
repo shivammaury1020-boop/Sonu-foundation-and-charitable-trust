@@ -252,10 +252,10 @@ export const BookAppointmentPageView: React.FC<BookingViewProps> = ({
                   Step 1 of 6
                 </span>
                 <h2 className="font-serif-luxury text-2xl font-bold text-[#201B1D]">
-                  Select Your Location
+                  Select Your Preferred Branch
                 </h2>
                 <p className="text-xs sm:text-sm text-[#6E6265]">
-                  Choose which Sonu’s Beauty Studio &amp; Academy branch in Vadodara you would like to visit.
+                  Choose Branch 1 (Waghodia Road) or Branch 2 (Adaniyapul, Fatepura) in Vadodara for your appointment.
                 </p>
               </div>
 
@@ -266,32 +266,36 @@ export const BookAppointmentPageView: React.FC<BookingViewProps> = ({
                     <button
                       key={loc.id}
                       type="button"
+                      aria-pressed={selected}
                       onClick={() => {
                         setForm({ ...form, location_id: loc.id });
                         setError(null);
                       }}
-                      className={`text-left p-5 rounded-2xl border-2 transition-all cursor-pointer ${
+                      className={`text-left p-5 rounded-2xl border-2 transition-all cursor-pointer flex flex-col justify-between ${
                         selected
                           ? 'border-[#6B173D] bg-[#FAF5EF] shadow-md'
                           : 'border-[#C8A15A]/35 bg-white hover:border-[#6B173D]/60'
                       }`}
                     >
-                      <div className="flex items-center justify-between gap-2 mb-2">
-                        <span className="text-xs font-bold text-[#6B173D] uppercase tracking-wider">
-                          {loc.badge}
-                        </span>
-                        {selected && <CheckCircle2 className="w-5 h-5 text-[#6B173D]" />}
+                      <div>
+                        <div className="flex items-center justify-between gap-2 mb-2">
+                          <span className="text-xs font-bold text-[#6B173D] uppercase tracking-wider">
+                            {loc.badge}
+                          </span>
+                          {selected && <CheckCircle2 className="w-5 h-5 text-[#6B173D] shrink-0" />}
+                        </div>
+                        <h3 className="font-serif-luxury text-lg font-bold text-[#201B1D]">
+                          {loc.name}
+                        </h3>
+                        <div className="text-xs text-[#6E6265] mt-2 space-y-0.5">
+                          {loc.addressLines.map((l, i) => (
+                            <div key={i}>{l}</div>
+                          ))}
+                        </div>
                       </div>
-                      <h3 className="font-serif-luxury text-lg font-bold text-[#201B1D]">
-                        {loc.name}
-                      </h3>
-                      <div className="text-xs text-[#6E6265] mt-2 space-y-0.5">
-                        {loc.addressLines.map((l, i) => (
-                          <div key={i}>{l}</div>
-                        ))}
-                      </div>
-                      <div className="mt-3 pt-2 border-t border-[#C8A15A]/20 text-xs text-[#4A0D29] font-medium">
-                        {loc.hours}
+                      <div className="mt-3 pt-2 border-t border-[#C8A15A]/20 text-xs text-[#4A0D29] font-medium flex flex-wrap items-center justify-between gap-2">
+                        <span>{loc.hours}</span>
+                        <span className="tabular-nums">{loc.phone}</span>
                       </div>
                     </button>
                   );

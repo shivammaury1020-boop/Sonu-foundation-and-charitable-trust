@@ -584,7 +584,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate, onQuickBookStart
                             : 'bg-white/10 text-white border-white/25 hover:bg-white/15'
                         }`}
                       >
-                        Location {idx + 1}: {idx === 0 ? 'Soma Talav Ring Rd' : 'Vadodara Branch 2'}
+                        Branch {idx + 1}: {idx === 0 ? 'Waghodia Road' : 'Adaniyapul, Fatepura'}
                       </button>
                     ))}
                   </div>
@@ -758,7 +758,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate, onQuickBookStart
               Our Locations
             </h2>
             <p className="text-sm sm:text-base text-[#6E6265] mt-1.5">
-              Conveniently serving clients and academy students across two separate locations in Vadodara, Gujarat.
+              Conveniently serving clients and academy students across Branch 1 (Waghodia Road) and Branch 2 (Adaniyapul, Fatepura) in Vadodara, Gujarat.
             </p>
           </div>
 
@@ -769,7 +769,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate, onQuickBookStart
                 className="bg-[#FAF5EF] rounded-2xl p-6 border border-[#C8A15A]/40 shadow-sm flex flex-col justify-between"
               >
                 <div className="space-y-3">
-                  <div className="flex items-center justify-between gap-2 text-xs text-[#6B173D] font-semibold">
+                  <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-[#6B173D] font-semibold">
                     <span>{loc.badge}</span>
                     {loc.coordinates && (
                       <span className="tabular-nums bg-[#F3E9DF] px-2.5 py-0.5 rounded-md border border-[#C8A15A]/35">
@@ -780,7 +780,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate, onQuickBookStart
                   <h3 className="font-serif-luxury text-xl font-bold text-[#201B1D]">
                     {loc.name}
                   </h3>
-                  <div className="flex items-start gap-2.5 text-sm text-[#6E6265]">
+                  <div className="flex items-start gap-2.5 text-sm text-[#6E6265] min-h-[60px]">
                     <MapPin className="w-4 h-4 text-[#6B173D] shrink-0 mt-1" />
                     <div>
                       {loc.addressLines.map((line, i) => (
@@ -801,6 +801,17 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate, onQuickBookStart
                       <span>{loc.hours}</span>
                     </span>
                   </div>
+
+                  {/* Interactive Branch Map Preview */}
+                  <div className="rounded-xl overflow-hidden border border-[#C8A15A]/35 h-52 bg-[#F3E9DF] mt-2">
+                    <iframe
+                      title={`Interactive map for ${loc.name}`}
+                      src={loc.mapEmbedUrl}
+                      className="w-full h-full border-0"
+                      loading="lazy"
+                      referrerPolicy="no-referrer-when-downgrade"
+                    />
+                  </div>
                 </div>
 
                 <div className="mt-5 pt-4 border-t border-[#C8A15A]/25 flex flex-wrap items-center gap-3">
@@ -820,7 +831,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate, onQuickBookStart
                     className="inline-flex items-center gap-1.5 bg-white hover:bg-[#F3E9DF] text-[#6B173D] border border-[#6B173D]/35 text-xs font-semibold px-4 py-2.5 rounded-xl transition-colors cursor-pointer"
                   >
                     <Calendar className="w-3.5 h-3.5" />
-                    <span>Book at This Location</span>
+                    <span>Book at {loc.id === 'location-1' ? 'Branch 1' : 'Branch 2'}</span>
                   </button>
                 </div>
               </div>

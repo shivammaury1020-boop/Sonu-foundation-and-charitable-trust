@@ -591,15 +591,15 @@ export const LuxuryFooter: React.FC<{
               <li className="flex items-start gap-2.5">
                 <MapPin className="w-4 h-4 text-[#C8A15A] shrink-0 mt-1" />
                 <div>
-                  <span className="block text-xs text-[#E6C98F] font-medium">Primary Location</span>
+                  <span className="block text-xs text-[#E6C98F] font-medium">Branch 1 · Waghodia Road</span>
                   <span>{LOCATIONS[0].addressLines.join(' ')}</span>
                 </div>
               </li>
               <li className="flex items-start gap-2.5">
                 <MapPin className="w-4 h-4 text-[#C8A15A] shrink-0 mt-1" />
                 <div>
-                  <span className="block text-xs text-[#E6C98F] font-medium">Working Location</span>
-                  <span className="tabular-nums">{LOCATIONS[1].coordinates} · Vadodara, Gujarat</span>
+                  <span className="block text-xs text-[#E6C98F] font-medium">Branch 2 · Adaniyapul, Fatepura</span>
+                  <span>{LOCATIONS[1].addressLines.join(' ')}</span>
                   <button
                     type="button"
                     onClick={() => onNavigate('locations')}
