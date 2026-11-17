@@ -19,14 +19,18 @@ import {
   type BookingRecord,
 } from './bookingLogic.ts';
 import {
+  BUSINESS_EMAIL,
   BUSINESS_INFO,
   COURSES,
   LOCATIONS,
   OFFICIAL_SOCIAL_PROFILES,
+  OWNER_PROFILE,
   PROPOSED_PROGRAM_TRACKS,
+  resolveYouTubeChannelUrl,
   SERVICES,
   SOCIAL_MEDIA_URLS,
   TIME_SLOTS,
+  VERIFIED_YOUTUBE_CHANNEL_URL,
 } from '../data/siteData.ts';
 import {
   addBlockedDateByAdmin,
@@ -456,10 +460,41 @@ test('11. OFFICIAL_SOCIAL_PROFILES and SOCIAL_MEDIA_URLS expose all five configu
   );
   assert.equal(
     OFFICIAL_SOCIAL_PROFILES[4].url,
-    'https://www.youtube.com/@sonusbeautystudioacademys04582'
+    SOCIAL_MEDIA_URLS.youtubeChannel
+  );
+  assert.equal(
+    OFFICIAL_SOCIAL_PROFILES[4].url.includes('@sonusbeautystudioacademyso4582'),
+    true
+  );
+  assert.equal(
+    OFFICIAL_SOCIAL_PROFILES[4].url.includes('s04582'),
+    false
   );
   assert.equal(
     OFFICIAL_SOCIAL_PROFILES[4].handle,
-    '@sonusbeautystudioacademys04582'
+    '@sonusbeautystudioacademyso4582'
   );
+  assert.equal(
+    resolveYouTubeChannelUrl('https://www.youtube.com/@sonusbeautystudioacademys04582'),
+    VERIFIED_YOUTUBE_CHANNEL_URL
+  );
+  assert.equal(
+    resolveYouTubeChannelUrl(''),
+    VERIFIED_YOUTUBE_CHANNEL_URL
+  );
+  assert.equal(
+    resolveYouTubeChannelUrl('not-a-valid-url'),
+    ''
+  );
+});
+
+test('12. Central BUSINESS_EMAIL removes incorrect address and OWNER_PROFILE configures Founder & Owner portrait', () => {
+  assert.equal(BUSINESS_INFO.email, BUSINESS_EMAIL);
+  assert.notEqual(BUSINESS_EMAIL.toLowerCase(), 'sonusbeautystudio@gmail.com');
+  assert.equal(OWNER_PROFILE.designation, 'Founder & Owner');
+  assert.equal(
+    OWNER_PROFILE.photoUrl,
+    '/assets/aistudio/3e494f118bb00ce44c2be67d6cc7077694a072aadf0740a7743eb762bb7caec3_c1cf6611.png'
+  );
+  assert.equal(OWNER_PROFILE.photoAlt.length > 20, true);
 });

@@ -31,6 +31,7 @@ import {
   GalleryCategory,
   GalleryItem,
   LOCATIONS,
+  OWNER_PROFILE,
   PageId,
   SERVICES,
   VERIFIED_REVIEWS,
@@ -649,6 +650,7 @@ export const ContactPageView: React.FC<{
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [savedRecord, setSavedRecord] = useState<ContactMessageRecord | null>(null);
+  const [activeMapLocIndex, setActiveMapLocIndex] = useState<0 | 1>(0);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -676,37 +678,69 @@ export const ContactPageView: React.FC<{
     }
   };
 
+  const activeMapLocation = LOCATIONS[activeMapLocIndex];
+
   return (
     <div className="py-10 sm:py-14 bg-[#FAF5EF]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
         <div className="text-center max-w-3xl mx-auto space-y-3">
-          <span className="text-xs font-bold tracking-[0.18em] uppercase text-[#6B173D]">
-            WE ARE HERE FOR YOU • VADODARA
-          </span>
-          <h1 className="font-serif-luxury text-3xl sm:text-5xl font-bold text-[#201B1D]">
+          <p className="text-xs font-bold tracking-[0.18em] uppercase text-[#6B173D]">
+            WE ARE HERE FOR YOU · VADODARA
+          </p>
+          <h1 className="font-serif-luxury text-3xl sm:text-5xl font-bold text-[#201B1D] text-balance">
             Contact Sonu’s Beauty Studio &amp; Academy
           </h1>
-          <p className="text-sm sm:text-base text-[#6E6265]">
-            Reach out for salon appointments, bridal makeup consultations, or beauty academy admissions.
+          <p className="text-sm sm:text-base text-[#6E6265] leading-relaxed">
+            Reach out directly for bridal artistry consultations, salon appointments, or beauty academy admissions in Vadodara.
           </p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          {/* Contact Information Cards */}
-          <div className="lg:col-span-5 space-y-4">
-            <div className="bg-white rounded-2xl p-6 border border-[#C8A15A]/40 shadow-sm space-y-4">
+          {/* Left Column: Owner Portrait Card + Direct Contact Details */}
+          <div className="lg:col-span-5 space-y-6">
+            {/* Owner's Professional Portrait Card */}
+            <article className="bg-white rounded-2xl border border-[#C8A15A]/45 shadow-sm overflow-hidden group transition-all duration-200 hover:shadow-md">
+              <div className="relative aspect-[4/3] w-full bg-[#F6EFE7] overflow-hidden">
+                <img
+                  src={OWNER_PROFILE.photoUrl}
+                  alt={OWNER_PROFILE.photoAlt}
+                  loading="eager"
+                  decoding="async"
+                  referrerPolicy="no-referrer"
+                  className="w-full h-full object-cover object-[50%_14%] transition-transform duration-300 ease-out group-hover:scale-[1.02]"
+                />
+              </div>
+
+              <div className="p-6 space-y-2.5">
+                <p className="text-[11px] font-bold tracking-[0.16em] uppercase text-[#6B173D]">
+                  {OWNER_PROFILE.designation}
+                </p>
+                <h2 className="font-serif-luxury text-2xl sm:text-[1.7rem] font-bold text-[#201B1D] leading-snug">
+                  {OWNER_PROFILE.name}
+                </h2>
+                <p className="text-xs font-medium text-[#4A0D29]/85">
+                  {OWNER_PROFILE.organization}
+                </p>
+                <p className="text-sm text-[#6E6265] leading-relaxed pt-2.5 border-t border-[#C8A15A]/25">
+                  {OWNER_PROFILE.summary}
+                </p>
+              </div>
+            </article>
+
+            {/* Direct Contact Details Card */}
+            <div className="bg-white rounded-2xl p-6 border border-[#C8A15A]/40 shadow-sm space-y-5">
               <h2 className="font-serif-luxury text-2xl font-bold text-[#201B1D]">
                 Direct Contact Details
               </h2>
 
-              <div className="space-y-3 text-sm">
+              <div className="space-y-4 text-sm">
                 <div className="flex items-start gap-3">
-                  <Phone className="w-5 h-5 text-[#6B173D] shrink-0 mt-0.5" />
+                  <Phone className="w-5 h-5 text-[#6B173D] shrink-0 mt-0.5" aria-hidden="true" />
                   <div>
                     <span className="text-xs text-[#6E6265] block">Phone &amp; WhatsApp</span>
                     <a
                       href={`tel:${BUSINESS_INFO.phoneRaw}`}
-                      className="font-bold text-[#201B1D] hover:text-[#6B173D] tabular-nums"
+                      className="font-bold text-[#201B1D] hover:text-[#6B173D] tabular-nums transition-colors"
                     >
                       {BUSINESS_INFO.phoneDisplay}
                     </a>
@@ -714,20 +748,26 @@ export const ContactPageView: React.FC<{
                 </div>
 
                 <div className="flex items-start gap-3">
-                  <Mail className="w-5 h-5 text-[#6B173D] shrink-0 mt-0.5" />
+                  <Mail className="w-5 h-5 text-[#6B173D] shrink-0 mt-0.5" aria-hidden="true" />
                   <div>
-                    <span className="text-xs text-[#6E6265] block">Email Address</span>
-                    <a
-                      href={`mailto:${BUSINESS_INFO.email}`}
-                      className="font-bold text-[#201B1D] hover:text-[#6B173D] break-all"
-                    >
-                      {BUSINESS_INFO.email}
-                    </a>
+                    <span className="text-xs text-[#6E6265] block">Business Email</span>
+                    {BUSINESS_INFO.email ? (
+                      <a
+                        href={`mailto:${BUSINESS_INFO.email}`}
+                        className="font-bold text-[#201B1D] hover:text-[#6B173D] break-all transition-colors"
+                      >
+                        {BUSINESS_INFO.email}
+                      </a>
+                    ) : (
+                      <span className="text-xs sm:text-sm font-medium text-[#6E6265]">
+                        Official email will be updated shortly — reach us via WhatsApp, Phone, or this form.
+                      </span>
+                    )}
                   </div>
                 </div>
 
                 <div className="flex items-start gap-3">
-                  <Clock className="w-5 h-5 text-[#C8A15A] shrink-0 mt-0.5" />
+                  <Clock className="w-5 h-5 text-[#C8A15A] shrink-0 mt-0.5" aria-hidden="true" />
                   <div>
                     <span className="text-xs text-[#6E6265] block">Opening Hours</span>
                     <span className="font-semibold text-[#201B1D]">{BUSINESS_INFO.hours}</span>
@@ -735,35 +775,13 @@ export const ContactPageView: React.FC<{
                 </div>
               </div>
 
-              <div className="pt-4 border-t border-[#C8A15A]/25 space-y-3">
-                {LOCATIONS.map((loc) => (
-                  <div key={loc.id} className="bg-[#FAF5EF] p-3.5 rounded-xl border border-[#C8A15A]/30">
-                    <div className="font-serif-luxury text-sm font-bold text-[#4A0D29]">
-                      {loc.name}
-                    </div>
-                    <p className="text-xs text-[#6E6265] mt-1">
-                      {loc.addressLines.join(' · ')}
-                    </p>
-                    <a
-                      href={loc.mapsUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1 text-xs font-semibold text-[#6B173D] hover:underline mt-1.5"
-                    >
-                      <span>Get Directions</span>
-                      <ExternalLink className="w-3 h-3" />
-                    </a>
-                  </div>
-                ))}
-              </div>
-
-              <div className="pt-2 flex flex-wrap gap-2.5">
+              <div className="pt-3 border-t border-[#C8A15A]/25 flex flex-wrap gap-2.5">
                 <button
                   type="button"
                   onClick={() => onNavigate('book')}
-                  className="flex-1 inline-flex items-center justify-center gap-1.5 bg-[#6B173D] text-white text-xs font-semibold py-3 px-4 rounded-xl cursor-pointer"
+                  className="flex-1 min-w-[160px] inline-flex items-center justify-center gap-2 bg-[#6B173D] hover:bg-[#4A0D29] text-white text-xs sm:text-sm font-semibold py-3 px-4 rounded-xl shadow-sm transition-colors cursor-pointer whitespace-nowrap"
                 >
-                  <Calendar className="w-3.5 h-3.5 text-[#E6C98F]" />
+                  <Calendar className="w-4 h-4 text-[#E6C98F] shrink-0" />
                   <span>Book Appointment</span>
                 </button>
                 <a
@@ -772,22 +790,22 @@ export const ContactPageView: React.FC<{
                   )}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex-1 inline-flex items-center justify-center gap-1.5 bg-[#FAF5EF] text-[#4A0D29] border border-[#C8A15A]/50 text-xs font-semibold py-3 px-4 rounded-xl"
+                  className="flex-1 min-w-[160px] inline-flex items-center justify-center gap-2 bg-[#FAF5EF] hover:bg-[#F3E9DF] text-[#4A0D29] border border-[#C8A15A]/50 text-xs sm:text-sm font-semibold py-3 px-4 rounded-xl transition-colors whitespace-nowrap"
                 >
-                  <MessageCircle className="w-3.5 h-3.5 text-[#6B173D]" />
+                  <MessageCircle className="w-4 h-4 text-[#6B173D] shrink-0" />
                   <span>Chat on WhatsApp</span>
                 </a>
               </div>
             </div>
           </div>
 
-          {/* Contact Form */}
-          <div className="lg:col-span-7">
+          {/* Right Column: Contact Form + Studio Locations & Google Maps */}
+          <div className="lg:col-span-7 space-y-6">
             {savedRecord ? (
               <div className="bg-white rounded-2xl p-8 border border-[#C8A15A]/45 shadow-sm text-center space-y-4">
                 <CheckCircle2 className="w-12 h-12 text-[#6B173D] mx-auto" />
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FAF5EF] border border-[#C8A15A]/45 text-xs font-semibold text-[#6B173D]">
-                  <span>Saved to Database · Ref ID: {savedRecord.reference_id}</span>
+                <div className="text-xs font-semibold text-[#6B173D]">
+                  Saved to Database · Ref ID: {savedRecord.reference_id}
                 </div>
                 <h2 className="font-serif-luxury text-2xl font-bold text-[#201B1D]">
                   Message Saved &amp; Received
@@ -802,7 +820,7 @@ export const ContactPageView: React.FC<{
                     )}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 bg-[#6B173D] text-white text-sm font-semibold px-6 py-3 rounded-xl"
+                    className="inline-flex items-center gap-2 bg-[#6B173D] hover:bg-[#4A0D29] text-white text-sm font-semibold px-6 py-3 rounded-xl transition-colors"
                   >
                     <MessageCircle className="w-4 h-4 text-[#E6C98F]" />
                     <span>Also Send via WhatsApp</span>
@@ -813,7 +831,7 @@ export const ContactPageView: React.FC<{
                       setSavedRecord(null);
                       setForm({ name: '', phone: '', email: '', message: '' });
                     }}
-                    className="px-5 py-3 rounded-xl border border-[#C8A15A]/45 text-sm font-medium text-[#201B1D] cursor-pointer"
+                    className="px-5 py-3 rounded-xl border border-[#C8A15A]/45 text-sm font-medium text-[#201B1D] hover:bg-[#FAF5EF] transition-colors cursor-pointer"
                   >
                     Send Another Message
                   </button>
@@ -825,9 +843,14 @@ export const ContactPageView: React.FC<{
                 noValidate
                 className="bg-white rounded-2xl p-6 sm:p-8 border border-[#C8A15A]/40 shadow-sm space-y-4"
               >
-                <h2 className="font-serif-luxury text-2xl font-bold text-[#201B1D]">
-                  Send Us a Message
-                </h2>
+                <div>
+                  <h2 className="font-serif-luxury text-2xl font-bold text-[#201B1D]">
+                    Send Us a Message
+                  </h2>
+                  <p className="text-xs sm:text-sm text-[#6E6265] mt-1">
+                    Share your appointment request, bridal inquiry, or course question and our studio team will reply promptly.
+                  </p>
+                </div>
 
                 {error && (
                   <div
@@ -899,16 +922,102 @@ export const ContactPageView: React.FC<{
                   />
                 </div>
 
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="inline-flex items-center gap-2 bg-[#6B173D] hover:bg-[#4A0D29] disabled:opacity-60 text-white text-sm font-semibold px-6 py-3 rounded-xl shadow-sm transition-colors cursor-pointer"
-                >
-                  <Send className="w-4 h-4 text-[#E6C98F]" />
-                  <span>{isSubmitting ? 'Sending Message...' : 'Send Message'}</span>
-                </button>
+                <div className="flex flex-wrap items-center gap-3 pt-1">
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="inline-flex items-center gap-2 bg-[#6B173D] hover:bg-[#4A0D29] disabled:opacity-60 text-white text-sm font-semibold px-6 py-3 rounded-xl shadow-sm transition-colors cursor-pointer"
+                  >
+                    <Send className="w-4 h-4 text-[#E6C98F]" />
+                    <span>{isSubmitting ? 'Sending Message...' : 'Send Message'}</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => onNavigate('courses')}
+                    className="inline-flex items-center gap-1.5 px-5 py-3 rounded-xl border border-[#C8A15A]/50 bg-[#FAF5EF] hover:bg-[#F3E9DF] text-xs sm:text-sm font-semibold text-[#4A0D29] transition-colors cursor-pointer"
+                  >
+                    <GraduationCap className="w-4 h-4 text-[#6B173D]" />
+                    <span>Explore Courses</span>
+                  </button>
+                </div>
               </form>
             )}
+
+            {/* Studio Locations & Interactive Google Map */}
+            <div className="bg-white rounded-2xl p-6 border border-[#C8A15A]/40 shadow-sm space-y-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div>
+                  <h2 className="font-serif-luxury text-xl sm:text-2xl font-bold text-[#201B1D]">
+                    Our Vadodara Studio &amp; Academy Locations
+                  </h2>
+                  <p className="text-xs text-[#6E6265] mt-0.5">
+                    Select a campus below to view the address and Google Maps directions.
+                  </p>
+                </div>
+                <div className="inline-flex items-center gap-1 p-1 rounded-xl bg-[#FAF5EF] border border-[#C8A15A]/35 self-start sm:self-auto">
+                  {LOCATIONS.map((loc, idx) => (
+                    <button
+                      key={loc.id}
+                      type="button"
+                      onClick={() => setActiveMapLocIndex(idx === 0 ? 0 : 1)}
+                      className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors cursor-pointer whitespace-nowrap ${
+                        activeMapLocIndex === idx
+                          ? 'bg-[#6B173D] text-white shadow-sm'
+                          : 'text-[#4A0D29] hover:bg-[#F3E9DF]'
+                      }`}
+                    >
+                      Location {idx + 1}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-stretch">
+                <div className="md:col-span-5 bg-[#FAF5EF] rounded-xl p-4 border border-[#C8A15A]/30 flex flex-col justify-between space-y-3">
+                  <div className="space-y-1.5">
+                    <div className="font-serif-luxury text-base font-bold text-[#4A0D29]">
+                      {activeMapLocation.name}
+                    </div>
+                    <p className="text-xs text-[#6E6265] leading-relaxed">
+                      {activeMapLocation.addressLines.join(' ')}
+                    </p>
+                    <p className="text-xs text-[#6E6265] pt-1">
+                      <span className="font-semibold text-[#201B1D]">Hours:</span> {activeMapLocation.hours}
+                    </p>
+                  </div>
+
+                  <div className="flex flex-wrap gap-2 pt-2 border-t border-[#C8A15A]/20">
+                    <a
+                      href={activeMapLocation.mapsUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 bg-[#6B173D] hover:bg-[#4A0D29] text-white text-xs font-semibold px-3.5 py-2 rounded-lg transition-colors"
+                    >
+                      <MapPin className="w-3.5 h-3.5 text-[#E6C98F]" />
+                      <span>Get Directions</span>
+                      <ExternalLink className="w-3 h-3" />
+                    </a>
+                    <button
+                      type="button"
+                      onClick={() => onNavigate('locations')}
+                      className="inline-flex items-center gap-1 text-xs font-semibold text-[#6B173D] hover:underline px-2 py-2 cursor-pointer"
+                    >
+                      <span>All Branch Details</span>
+                    </button>
+                  </div>
+                </div>
+
+                <div className="md:col-span-7 rounded-xl overflow-hidden border border-[#C8A15A]/35 bg-[#F6EFE7] min-h-[210px]">
+                  <iframe
+                    src={activeMapLocation.mapEmbedUrl}
+                    title={`Google Maps location for ${activeMapLocation.name}`}
+                    loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
+                    className="w-full h-full min-h-[210px] border-0"
+                  />
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -1034,7 +1143,8 @@ export const FoundationPageView: React.FC<PageNavProps> = ({ onNavigate }) => {
               Connect with Sonu Foundation &amp; Charitable Trust
             </h2>
             <p className="text-xs sm:text-sm text-[#6E6265]">
-              Vadodara, Gujarat · Phone: {BUSINESS_INFO.phoneDisplay} · Email: {BUSINESS_INFO.email}
+              Vadodara, Gujarat · Phone: {BUSINESS_INFO.phoneDisplay}
+              {BUSINESS_INFO.email ? ` · Email: ${BUSINESS_INFO.email}` : ''}
             </p>
           </div>
           <div className="flex flex-wrap items-center gap-3">
@@ -1093,7 +1203,8 @@ export const PrivacyPolicyPageView: React.FC<PageNavProps> = ({ onNavigate }) =>
           3. Contact Us
         </h2>
         <p>
-          For any privacy-related questions, please contact Sonu’s Beauty Studio &amp; Academy at {BUSINESS_INFO.phoneDisplay} or {BUSINESS_INFO.email}.
+          For any privacy-related questions, please contact Sonu’s Beauty Studio &amp; Academy at {BUSINESS_INFO.phoneDisplay}
+          {BUSINESS_INFO.email ? ` or ${BUSINESS_INFO.email}` : ''}.
         </p>
       </div>
       <div className="pt-4">

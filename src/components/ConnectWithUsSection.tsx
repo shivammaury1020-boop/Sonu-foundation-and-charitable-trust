@@ -16,6 +16,8 @@ export const ConnectWithUsSection: React.FC<ConnectWithUsSectionProps> = ({
   const youtubeProfile = OFFICIAL_SOCIAL_PROFILES.find(
     (profile) => profile.platform === 'youtube'
   );
+  const youtubeChannelUrl = (youtubeProfile?.url || SOCIAL_MEDIA_URLS.youtubeChannel || '').trim();
+  const isYouTubeChannelActive = /^https?:\/\//i.test(youtubeChannelUrl);
 
   return (
     <section
@@ -43,17 +45,29 @@ export const ConnectWithUsSection: React.FC<ConnectWithUsSectionProps> = ({
             </p>
           </div>
 
-          <a
-            href={SOCIAL_MEDIA_URLS.youtubeChannel}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label={`Subscribe on YouTube – Sonu's Beauty Studio & Academy (${SOCIAL_MEDIA_URLS.youtubeHandle}) (opens in a new tab)`}
-            className="inline-flex items-center justify-center gap-2.5 bg-[#6B173D] hover:bg-[#4A0D29] text-white border border-[#C8A15A]/60 text-sm font-semibold px-5 py-3 rounded-xl shadow-sm hover:shadow-md transition-all duration-150 whitespace-nowrap shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6B173D]"
-          >
-            <Youtube className="w-5 h-5 text-[#E6C98F] shrink-0" aria-hidden="true" />
-            <span>Subscribe on YouTube</span>
-            <ExternalLink className="w-3.5 h-3.5 text-[#E6C98F]/85 shrink-0" aria-hidden="true" />
-          </a>
+          {isYouTubeChannelActive ? (
+            <a
+              href={youtubeChannelUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`Subscribe on YouTube – Sonu's Beauty Studio & Academy (${SOCIAL_MEDIA_URLS.youtubeHandle}) (opens in a new tab)`}
+              className="inline-flex items-center justify-center gap-2.5 bg-[#6B173D] hover:bg-[#4A0D29] text-white border border-[#C8A15A]/60 text-sm font-semibold px-5 py-3 rounded-xl shadow-sm hover:shadow-md transition-all duration-150 whitespace-nowrap shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6B173D]"
+            >
+              <Youtube className="w-5 h-5 text-[#E6C98F] shrink-0" aria-hidden="true" />
+              <span>Subscribe on YouTube</span>
+              <ExternalLink className="w-3.5 h-3.5 text-[#E6C98F]/85 shrink-0" aria-hidden="true" />
+            </a>
+          ) : (
+            <button
+              type="button"
+              disabled
+              aria-disabled="true"
+              className="inline-flex items-center justify-center gap-2.5 bg-[#6B173D]/55 text-white/85 border border-[#C8A15A]/40 text-sm font-semibold px-5 py-3 rounded-xl opacity-80 cursor-not-allowed whitespace-nowrap shrink-0"
+            >
+              <Youtube className="w-5 h-5 text-[#E6C98F]/80 shrink-0" aria-hidden="true" />
+              <span>YouTube · Pending Verification</span>
+            </button>
+          )}
         </div>
 
         {/* Instagram & Facebook Official Profiles */}
@@ -99,55 +113,90 @@ export const ConnectWithUsSection: React.FC<ConnectWithUsSectionProps> = ({
           })}
         </div>
 
-        {/* Official YouTube Channel Feature Row */}
+        {/* Official YouTube Channel Feature Card */}
         {youtubeProfile && (
-          <div className="mt-4 sm:mt-5 bg-white rounded-2xl p-5 sm:p-6 border border-[#C8A15A]/45 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          isYouTubeChannelActive ? (
             <a
-              href={youtubeProfile.url}
+              href={youtubeChannelUrl}
               target="_blank"
               rel="noopener noreferrer"
-              aria-label={`${youtubeProfile.platformLabel} – ${youtubeProfile.accountName} ${youtubeProfile.handle ?? ''} (opens in a new tab)`}
-              className="group flex items-center gap-4 min-w-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6B173D] rounded-xl"
+              aria-label={`${youtubeProfile.platformLabel} – ${youtubeProfile.accountName}${youtubeProfile.handle ? ` (${youtubeProfile.handle})` : ''} — Subscribe on YouTube (opens in a new tab)`}
+              className="group mt-4 sm:mt-5 bg-white hover:bg-[#FAF5EF] rounded-2xl p-5 sm:p-6 border border-[#C8A15A]/45 hover:border-[#6B173D] shadow-sm hover:shadow-md transition-all duration-150 hover:-translate-y-0.5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6B173D]"
             >
-              <div
-                className="w-12 h-12 rounded-xl bg-[#4A0D29] group-hover:bg-[#6B173D] border border-[#C8A15A]/60 flex items-center justify-center shrink-0 transition-colors duration-150"
-                aria-hidden="true"
+              <div className="flex items-center gap-4 min-w-0">
+                <div
+                  className="w-12 h-12 rounded-xl bg-[#4A0D29] group-hover:bg-[#6B173D] border border-[#C8A15A]/60 flex items-center justify-center shrink-0 transition-colors duration-150"
+                  aria-hidden="true"
+                >
+                  <Youtube className="w-5 h-5 text-[#E6C98F]" />
+                </div>
+
+                <div className="min-w-0">
+                  <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5">
+                    <span className="text-[11px] font-bold uppercase tracking-[0.14em] text-[#6B173D]">
+                      {youtubeProfile.platformLabel}
+                    </span>
+                    {youtubeProfile.handle && (
+                      <>
+                        <span aria-hidden="true" className="text-[#C8A15A]">·</span>
+                        <span className="text-xs font-medium text-[#6E6265] truncate">
+                          {youtubeProfile.handle}
+                        </span>
+                      </>
+                    )}
+                  </div>
+                  <div className="font-serif-luxury text-lg font-bold text-[#201B1D] group-hover:text-[#4A0D29] leading-snug mt-0.5">
+                    {youtubeProfile.accountName}
+                  </div>
+                </div>
+              </div>
+
+              <span className="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-[#E6C98F] to-[#C8A15A] group-hover:from-[#F0D7A3] group-hover:to-[#C8A15A] text-[#201B1D] text-xs sm:text-sm font-bold px-5 py-3 rounded-xl shadow-sm transition-all duration-150 whitespace-nowrap shrink-0">
+                <Youtube className="w-4 h-4 text-[#4A0D29] shrink-0" aria-hidden="true" />
+                <span>Subscribe on YouTube</span>
+                <ExternalLink className="w-3.5 h-3.5 text-[#4A0D29]/80 shrink-0" aria-hidden="true" />
+              </span>
+            </a>
+          ) : (
+            <div
+              aria-disabled="true"
+              className="mt-4 sm:mt-5 bg-white/80 rounded-2xl p-5 sm:p-6 border border-[#C8A15A]/35 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4"
+            >
+              <div className="flex items-center gap-4 min-w-0">
+                <div
+                  className="w-12 h-12 rounded-xl bg-[#4A0D29]/70 border border-[#C8A15A]/45 flex items-center justify-center shrink-0"
+                  aria-hidden="true"
+                >
+                  <Youtube className="w-5 h-5 text-[#E6C98F]/80" />
+                </div>
+
+                <div className="min-w-0">
+                  <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5">
+                    <span className="text-[11px] font-bold uppercase tracking-[0.14em] text-[#6B173D]">
+                      {youtubeProfile.platformLabel}
+                    </span>
+                    <span aria-hidden="true" className="text-[#C8A15A]">·</span>
+                    <span className="text-xs font-medium text-[#6E6265]">
+                      Channel Link Pending Verification
+                    </span>
+                  </div>
+                  <div className="font-serif-luxury text-lg font-bold text-[#201B1D] leading-snug mt-0.5">
+                    {youtubeProfile.accountName}
+                  </div>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                disabled
+                aria-disabled="true"
+                className="inline-flex items-center justify-center gap-2 bg-[#E6C98F]/45 text-[#201B1D]/65 text-xs sm:text-sm font-bold px-5 py-3 rounded-xl cursor-not-allowed whitespace-nowrap shrink-0"
               >
-                <Youtube className="w-5 h-5 text-[#E6C98F]" />
-              </div>
-
-              <div className="min-w-0">
-                <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5">
-                  <span className="text-[11px] font-bold uppercase tracking-[0.14em] text-[#6B173D]">
-                    {youtubeProfile.platformLabel}
-                  </span>
-                  {youtubeProfile.handle && (
-                    <>
-                      <span aria-hidden="true" className="text-[#C8A15A]">·</span>
-                      <span className="text-xs font-medium text-[#6E6265] truncate">
-                        {youtubeProfile.handle}
-                      </span>
-                    </>
-                  )}
-                </div>
-                <div className="font-serif-luxury text-lg font-bold text-[#201B1D] group-hover:text-[#4A0D29] leading-snug mt-0.5">
-                  {youtubeProfile.accountName}
-                </div>
-              </div>
-            </a>
-
-            <a
-              href={youtubeProfile.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label={`Subscribe on YouTube to ${youtubeProfile.accountName} (opens in a new tab)`}
-              className="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-[#E6C98F] to-[#C8A15A] hover:from-[#F0D7A3] hover:to-[#C8A15A] text-[#201B1D] text-xs sm:text-sm font-bold px-5 py-3 rounded-xl shadow-sm transition-all duration-150 whitespace-nowrap shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6B173D]"
-            >
-              <Youtube className="w-4 h-4 text-[#4A0D29] shrink-0" aria-hidden="true" />
-              <span>Subscribe on YouTube</span>
-              <ExternalLink className="w-3.5 h-3.5 text-[#4A0D29]/80 shrink-0" aria-hidden="true" />
-            </a>
-          </div>
+                <Youtube className="w-4 h-4 text-[#4A0D29]/60 shrink-0" aria-hidden="true" />
+                <span>Pending Verification</span>
+              </button>
+            </div>
+          )
         )}
       </div>
     </section>

@@ -159,6 +159,50 @@ export const BUSINESS_CLAIMS_CONFIG: BusinessClaimsConfig = {
   certificationDetailsVerified: envMeta.VITE_CERTIFICATION_VERIFIED === 'true',
 };
 
+/**
+ * Central Business Email Configuration.
+ * Update this single constant (or set VITE_BUSINESS_EMAIL in .env) once the client provides the verified email.
+ * Kept empty until confirmed so no incorrect or assumed email address is displayed.
+ */
+export const BUSINESS_EMAIL: string = (envMeta.VITE_BUSINESS_EMAIL || '').trim();
+
+export const OWNER_PROFILE = {
+  name: 'Sonal Jingar',
+  designation: 'Founder & Owner',
+  organization: 'Sonu’s Beauty Studio & Academy · Sonu Foundation & Charitable Trust',
+  photoUrl:
+    '/assets/aistudio/3e494f118bb00ce44c2be67d6cc7077694a072aadf0740a7743eb762bb7caec3_c1cf6611.png',
+  photoAlt:
+    'Sonal Jingar, Founder and Owner of Sonu’s Beauty Studio & Academy and Sonu Foundation and Charitable Trust in Vadodara',
+  summary:
+    'Guiding bridal artistry, studio beauty services, and hands-on certified beauty academy training in Vadodara.',
+};
+
+export const VERIFIED_YOUTUBE_CHANNEL_URL =
+  'https://www.youtube.com/@sonusbeautystudioacademyso4582';
+export const VERIFIED_YOUTUBE_HANDLE = '@sonusbeautystudioacademyso4582';
+
+const BROKEN_YOUTUBE_HANDLES = ['@sonusbeautystudioacademys04582'] as const;
+
+/**
+ * Resolves the active YouTube channel URL, ensuring stale/broken 404 handles
+ * (such as the old `s04582` typo) are never published as live links.
+ */
+export function resolveYouTubeChannelUrl(candidateUrl?: string | null): string {
+  const trimmed = typeof candidateUrl === 'string' ? candidateUrl.trim() : '';
+  if (!trimmed) {
+    return VERIFIED_YOUTUBE_CHANNEL_URL;
+  }
+  const lower = trimmed.toLowerCase();
+  if (BROKEN_YOUTUBE_HANDLES.some((broken) => lower.includes(broken))) {
+    return VERIFIED_YOUTUBE_CHANNEL_URL;
+  }
+  if (!/^https?:\/\//i.test(trimmed)) {
+    return '';
+  }
+  return trimmed;
+}
+
 export const BUSINESS_INFO = {
   name: 'Sonu Foundation and Charitable Trust',
   shortName: 'Sonu Foundation',
@@ -172,7 +216,7 @@ export const BUSINESS_INFO = {
   studioPhoneAlt: '+91 79902 34736',
   whatsappNumber: +917990234736,
   whatsappDisplay: '+91 79902 34736',
-  email: 'sonusbeautystudio@gmail.com',
+  email: BUSINESS_EMAIL,
   hours: 'Mon – Sun : 10:00 AM – 8:00 PM',
   promoText: 'Empowering women through skill development, training, and community support.',
   certificationDisclaimer:
@@ -187,9 +231,8 @@ export const BUSINESS_INFO = {
     facebookUrl:
       envMeta.VITE_FACEBOOK_URL ||
       "https://www.facebook.com/search/top?q=Sonu's%20Beauty%20Studio",
-    youtubeUrl:
-      envMeta.VITE_YOUTUBE_URL || 'https://www.youtube.com/@sonusbeautystudioacademys04582',
-    youtubeHandle: '@sonusbeautystudioacademys04582',
+    youtubeUrl: resolveYouTubeChannelUrl(envMeta.VITE_YOUTUBE_URL),
+    youtubeHandle: VERIFIED_YOUTUBE_HANDLE,
   },
 };
 
@@ -223,9 +266,8 @@ export const SOCIAL_MEDIA_URLS = {
   facebookSonalJingar:
     envMeta.VITE_FACEBOOK_SONAL_URL ||
     'https://www.facebook.com/search/top?q=Sonal%20Jingar',
-  youtubeChannel:
-    envMeta.VITE_YOUTUBE_URL || 'https://www.youtube.com/@sonusbeautystudioacademys04582',
-  youtubeHandle: '@sonusbeautystudioacademys04582',
+  youtubeChannel: resolveYouTubeChannelUrl(envMeta.VITE_YOUTUBE_URL),
+  youtubeHandle: VERIFIED_YOUTUBE_HANDLE,
 } as const;
 
 export const OFFICIAL_SOCIAL_PROFILES: SocialProfileLink[] = [

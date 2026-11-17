@@ -138,6 +138,15 @@ export const TopHeader: React.FC<NavbarProps> = ({ currentPage, onNavigate }) =>
           </button>
 
           <div className="flex items-center gap-3 sm:gap-5 shrink-0">
+            {BUSINESS_INFO.email && (
+              <a
+                href={`mailto:${BUSINESS_INFO.email}`}
+                className="hidden xl:flex items-center gap-1.5 text-[#FAF5EF]/90 hover:text-[#E6C98F] transition-colors whitespace-nowrap"
+              >
+                <Mail className="w-3.5 h-3.5 text-[#C8A15A]" aria-hidden="true" />
+                <span>{BUSINESS_INFO.email}</span>
+              </a>
+            )}
             <button
               type="button"
               onClick={() => handleNav('locations')}
@@ -408,6 +417,26 @@ export const LuxuryFooter: React.FC<{
                       : profile.platform === 'facebook'
                       ? Facebook
                       : Youtube;
+                  const isLinkActive = /^https?:\/\//i.test(profile.url);
+                  if (!isLinkActive) {
+                    return (
+                      <div
+                        key={profile.id}
+                        aria-disabled="true"
+                        className="flex items-center gap-2.5 px-3 py-2 rounded-lg border border-[#C8A15A]/25 bg-[#591131]/35 text-xs text-[#FAF5EF]/65 cursor-not-allowed"
+                      >
+                        <IconComponent className="w-4 h-4 text-[#E6C98F]/60 shrink-0" aria-hidden="true" />
+                        <span className="min-w-0 flex-1 leading-tight">
+                          <span className="text-[10px] uppercase tracking-wider text-[#E6C98F]/75 font-semibold block truncate">
+                            {`${profile.platformLabel} · Pending Verification`}
+                          </span>
+                          <span className="font-medium text-[#FAF5EF]/75 block truncate">
+                            {profile.accountName}
+                          </span>
+                        </span>
+                      </div>
+                    );
+                  }
                   return (
                     <a
                       key={profile.id}
@@ -433,16 +462,28 @@ export const LuxuryFooter: React.FC<{
                   );
                 })}
 
-                <a
-                  href={SOCIAL_MEDIA_URLS.youtubeChannel}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={`Subscribe on YouTube (${SOCIAL_MEDIA_URLS.youtubeHandle}) (opens in a new tab)`}
-                  className="inline-flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg bg-gradient-to-r from-[#E6C98F] to-[#C8A15A] hover:from-[#F0D7A3] hover:to-[#C8A15A] text-[#201B1D] text-xs font-bold shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FAF5EF]"
-                >
-                  <Youtube className="w-4 h-4 text-[#4A0D29] shrink-0" aria-hidden="true" />
-                  <span>Subscribe on YouTube</span>
-                </a>
+                {/^https?:\/\//i.test(SOCIAL_MEDIA_URLS.youtubeChannel) ? (
+                  <a
+                    href={SOCIAL_MEDIA_URLS.youtubeChannel}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={`Subscribe on YouTube (${SOCIAL_MEDIA_URLS.youtubeHandle}) (opens in a new tab)`}
+                    className="inline-flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg bg-gradient-to-r from-[#E6C98F] to-[#C8A15A] hover:from-[#F0D7A3] hover:to-[#C8A15A] text-[#201B1D] text-xs font-bold shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FAF5EF]"
+                  >
+                    <Youtube className="w-4 h-4 text-[#4A0D29] shrink-0" aria-hidden="true" />
+                    <span>Subscribe on YouTube</span>
+                  </a>
+                ) : (
+                  <button
+                    type="button"
+                    disabled
+                    aria-disabled="true"
+                    className="inline-flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg bg-[#E6C98F]/35 text-[#FAF5EF]/75 text-xs font-bold cursor-not-allowed"
+                  >
+                    <Youtube className="w-4 h-4 text-[#E6C98F]/75 shrink-0" aria-hidden="true" />
+                    <span>YouTube Pending Verification</span>
+                  </button>
+                )}
 
                 <a
                   href={buildWhatsAppGeneralUrl(
@@ -576,9 +617,13 @@ export const LuxuryFooter: React.FC<{
               </li>
               <li className="flex items-center gap-2.5">
                 <Mail className="w-4 h-4 text-[#C8A15A] shrink-0" />
-                <a href={`mailto:${BUSINESS_INFO.email}`} className="hover:text-[#E6C98F] break-all">
-                  {BUSINESS_INFO.email}
-                </a>
+                {BUSINESS_INFO.email ? (
+                  <a href={`mailto:${BUSINESS_INFO.email}`} className="hover:text-[#E6C98F] break-all">
+                    {BUSINESS_INFO.email}
+                  </a>
+                ) : (
+                  <span className="text-[#FAF5EF]/75 text-xs">Official email updating soon</span>
+                )}
               </li>
               <li className="flex items-center gap-2.5">
                 <Clock className="w-4 h-4 text-[#C8A15A] shrink-0" />
