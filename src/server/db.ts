@@ -1070,11 +1070,18 @@ export async function createContactMessageRecord(
     const dbFilePath = options?.dbFilePath || DEFAULT_DB_PATH;
     const db = await readLocalDb(dbFilePath);
 
+    const allowedCategories = new Set(['trust', 'academy', 'studio']);
+    const normalizedCategory =
+      typeof rawInput?.category === 'string' && allowedCategories.has(rawInput.category)
+        ? (rawInput.category as ContactMessageInput['category'])
+        : undefined;
+
     const input: ContactMessageInput = {
       name: sanitizeInput(rawInput?.name),
       phone: sanitizeInput(rawInput?.phone),
       email: sanitizeInput(rawInput?.email),
       message: sanitizeInput(rawInput?.message),
+      ...(normalizedCategory ? { category: normalizedCategory } : {}),
     };
 
     const validation = validateContactMessage(input, db.contact_messages);
@@ -1102,6 +1109,7 @@ export async function createContactMessageRecord(
       phone: input.phone,
       email: input.email,
       message: input.message,
+      ...(normalizedCategory ? { category: normalizedCategory } : {}),
       status: 'Received',
       created_at: now.toISOString(),
       storage_backend: supa.configured ? 'supabase' : 'server-db',

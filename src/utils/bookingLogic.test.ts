@@ -12,6 +12,7 @@ import {
   generateBookingId,
   formatWhatsAppBookingMessage,
   buildWhatsAppBookingUrl,
+  buildCategoryEnquiryWhatsAppUrl,
   validateCourseEnquiry,
   validateContactMessage,
   isSlotWithinBusinessHours,
@@ -22,6 +23,7 @@ import {
   BUSINESS_EMAIL,
   BUSINESS_INFO,
   COURSES,
+  ENQUIRY_CATEGORIES,
   LOCATIONS,
   OFFICIAL_SOCIAL_PROFILES,
   OWNER_PROFILE,
@@ -178,8 +180,8 @@ test('7. siteData contains all 36 actual client services, 9 academy courses, and
 
   // Branch 2 – Adaniyapul, Fatepura
   assert.equal(LOCATIONS[1].name, 'Sonu’s Beauty Studio & Academy – Adaniyapul, Fatepura');
-  assert.equal(LOCATIONS[1].coordinates, '22.3104840, 73.2442090');
-  assert.equal(LOCATIONS[1].mapsUrl, 'https://maps.app.goo.gl/3CzRKX4UssDLeFaEA');
+  assert.equal(LOCATIONS[1].coordinates, '22.305025, 73.210304');
+  assert.equal(LOCATIONS[1].mapsUrl, 'https://maps.google.com/?q=22.305025,73.210304');
   const loc2Addr = LOCATIONS[1].addressLines.join(' ');
   assert.equal(loc2Addr.includes('Adaniyapul, Fatepura'), true);
   assert.equal(loc2Addr.includes('390006'), true);
@@ -187,7 +189,7 @@ test('7. siteData contains all 36 actual client services, 9 academy courses, and
   // Ensure the two branches never share or mix map embed URLs or links
   assert.notEqual(LOCATIONS[0].mapEmbedUrl, LOCATIONS[1].mapEmbedUrl);
   assert.equal(LOCATIONS[0].mapEmbedUrl.includes('22.280752,73.230896'), true);
-  assert.equal(LOCATIONS[1].mapEmbedUrl.includes('22.3104840,73.2442090'), true);
+  assert.equal(LOCATIONS[1].mapEmbedUrl.includes('22.305025,73.210304'), true);
   assert.notEqual(LOCATIONS[0].mapsUrl, LOCATIONS[1].mapsUrl);
 
   const proposedNames = PROPOSED_PROGRAM_TRACKS.map((track) => track.name);
@@ -532,10 +534,10 @@ test('11. OFFICIAL_SOCIAL_PROFILES and SOCIAL_MEDIA_URLS expose all five configu
   );
 });
 
-test('12. Central BUSINESS_EMAIL configures Sonaljinger@gmil.com and OWNER_PROFILE configures Founder & Owner / Proprietor portrait', () => {
+test('12. Central BUSINESS_EMAIL configures sonaljinger25@gmail.com and OWNER_PROFILE configures Founder & Owner / Proprietor portrait', () => {
   assert.equal(BUSINESS_INFO.email, BUSINESS_EMAIL);
-  assert.equal(BUSINESS_EMAIL, 'Sonaljinger@gmil.com');
-  assert.notEqual(BUSINESS_EMAIL.toLowerCase(), 'sonusbeautystudio@gmail.com');
+  assert.equal(BUSINESS_EMAIL, 'sonaljinger25@gmail.com');
+  assert.equal(BUSINESS_EMAIL.includes('gmil'), false);
   assert.equal(OWNER_PROFILE.name, 'Sonal Jingar');
   assert.equal(OWNER_PROFILE.designation, 'Founder & Owner');
   assert.equal(OWNER_PROFILE.proprietorDesignation, 'Founder & Proprietor');
@@ -544,4 +546,49 @@ test('12. Central BUSINESS_EMAIL configures Sonaljinger@gmil.com and OWNER_PROFI
     '/assets/aistudio/3e494f118bb00ce44c2be67d6cc7077694a072aadf0740a7743eb762bb7caec3_c1cf6611.png'
   );
   assert.equal(OWNER_PROFILE.photoAlt.length > 20, true);
+});
+
+test('13. Three separated enquiry categories generate exact unmixed WhatsApp URLs and persist category in DB', async () => {
+  assert.equal(ENQUIRY_CATEGORIES.length, 3);
+  assert.deepEqual(
+    ENQUIRY_CATEGORIES.map((c) => c.id),
+    ['trust', 'academy', 'studio']
+  );
+
+  const trustUrl = buildCategoryEnquiryWhatsAppUrl('trust');
+  const academyUrl = buildCategoryEnquiryWhatsAppUrl('academy');
+  const studioUrl = buildCategoryEnquiryWhatsAppUrl('studio');
+
+  assert.equal(
+    decodeURIComponent(trustUrl.split('?text=')[1]),
+    'Hello Sonu Foundation and Charitable Trust! I would like to connect regarding your community initiatives, women empowerment and skill development programs.'
+  );
+  assert.equal(
+    decodeURIComponent(academyUrl.split('?text=')[1]),
+    "Hello Sonu's Beauty Studio & Academy! I am interested in learning more about your professional beauty courses and training programs. Please share the course details, fees and batch timings."
+  );
+  assert.equal(
+    decodeURIComponent(studioUrl.split('?text=')[1]),
+    "Hello Sonu's Beauty Studio! I would like to enquire about your beauty services, including facials, waxing, manicure, pedicure and nail treatments. Please share the details and appointment availability."
+  );
+
+  // Verify category metadata persists cleanly via createContactMessageRecord
+  const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'sbs-enquiry-cat-'));
+  const dbPath = path.join(tempDir, 'db.json');
+  try {
+    const res = await createContactMessageRecord(
+      {
+        name: 'Kajal Patel',
+        phone: '9876543219',
+        email: 'kajal@example.com',
+        message: '[Beauty Treatment & Appointment Enquiry] Facial and manicure availability on Saturday.',
+        category: 'studio',
+      },
+      { dbFilePath: dbPath }
+    );
+    assert.equal(res.status, 201);
+    assert.equal(res.contactMessage?.category, 'studio');
+  } finally {
+    fs.rmSync(tempDir, { recursive: true, force: true });
+  }
 });

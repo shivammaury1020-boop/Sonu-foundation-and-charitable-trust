@@ -164,8 +164,91 @@ export const BUSINESS_CLAIMS_CONFIG: BusinessClaimsConfig = {
  * Update this single constant (or set VITE_BUSINESS_EMAIL in .env) to change the displayed business email site-wide.
  */
 export const BUSINESS_EMAIL: string = (
-  envMeta.VITE_BUSINESS_EMAIL || 'Sonaljinger@gmil.com'
+  envMeta.VITE_BUSINESS_EMAIL || 'sonaljinger25@gmail.com'
 ).trim();
+
+export type EnquiryCategoryId = 'trust' | 'academy' | 'studio';
+
+export interface EnquiryCategoryConfig {
+  id: EnquiryCategoryId;
+  code: 'A' | 'B' | 'C';
+  title: string;
+  shortTitle: string;
+  businessName: string;
+  purposes: string[];
+  whatsappMessage: string;
+  whatsappButtonLabel: string;
+  formButtonLabel: string;
+  formHeading: string;
+  detailsPlaceholder: string;
+}
+
+export const ENQUIRY_CATEGORIES: EnquiryCategoryConfig[] = [
+  {
+    id: 'trust',
+    code: 'A',
+    title: 'Foundation & Charitable Trust Enquiry',
+    shortTitle: 'Trust Enquiry',
+    businessName: 'Sonu Foundation and Charitable Trust',
+    purposes: [
+      'Community initiatives',
+      'Women empowerment',
+      'Skill development',
+      'Charitable activities',
+    ],
+    whatsappMessage:
+      'Hello Sonu Foundation and Charitable Trust! I would like to connect regarding your community initiatives, women empowerment and skill development programs.',
+    whatsappButtonLabel: 'WhatsApp Trust Enquiry',
+    formButtonLabel: 'Trust Enquiry Form',
+    formHeading: 'Foundation & Charitable Trust Enquiry',
+    detailsPlaceholder:
+      'Share how you would like to connect regarding community initiatives, women empowerment, skill development, or charitable activities...',
+  },
+  {
+    id: 'academy',
+    code: 'B',
+    title: 'Beauty Academy Course Enquiry',
+    shortTitle: 'Academy Enquiry',
+    businessName: "Sonu's Beauty Studio & Academy",
+    purposes: [
+      'Professional beauty courses',
+      'Training programs',
+      'Course fees',
+      'Batch timings',
+      'Admission enquiries',
+    ],
+    whatsappMessage:
+      "Hello Sonu's Beauty Studio & Academy! I am interested in learning more about your professional beauty courses and training programs. Please share the course details, fees and batch timings.",
+    whatsappButtonLabel: 'WhatsApp Academy Enquiry',
+    formButtonLabel: 'Academy Enquiry Form',
+    formHeading: 'Beauty Academy Course Enquiry',
+    detailsPlaceholder:
+      'Tell us which professional beauty courses or training programs you are interested in, plus any questions on course fees, batch timings, or admissions...',
+  },
+  {
+    id: 'studio',
+    code: 'C',
+    title: 'Beauty Treatment & Appointment Enquiry',
+    shortTitle: 'Studio Enquiry',
+    businessName: "Sonu's Beauty Studio",
+    purposes: [
+      'Facial',
+      'Waxing',
+      'Manicure',
+      'Pedicure',
+      'Nail treatments',
+      'Other beauty services',
+      'Appointment enquiries',
+    ],
+    whatsappMessage:
+      "Hello Sonu's Beauty Studio! I would like to enquire about your beauty services, including facials, waxing, manicure, pedicure and nail treatments. Please share the details and appointment availability.",
+    whatsappButtonLabel: 'WhatsApp Beauty Studio Enquiry',
+    formButtonLabel: 'Studio Enquiry Form',
+    formHeading: 'Beauty Treatment & Appointment Enquiry',
+    detailsPlaceholder:
+      'Tell us which beauty services (facial, waxing, manicure, pedicure, nail treatments, etc.) or appointment dates you would like to enquire about...',
+  },
+];
 
 export const OWNER_PROFILE = {
   name: 'Sonal Jingar',
@@ -314,7 +397,7 @@ export const OFFICIAL_SOCIAL_PROFILES: SocialProfileLink[] = [
 /**
  * Location Schema:
  * - Branch 1 (Somatalav, Waghodia Road): 22.280752, 73.230896 -> https://www.google.com/maps?q=22.280752,73.230896
- * - Branch 2 (Adaniyapul, Fatepura): 22.3104840, 73.2442090 -> https://maps.app.goo.gl/3CzRKX4UssDLeFaEA
+ * - Branch 2 (Adaniyapul, Fatepura): 22.305025, 73.210304 -> https://maps.google.com/?q=22.305025,73.210304
  */
 export function resolveLocation2AddressLines(): string[] {
   return [
@@ -349,10 +432,10 @@ export const LOCATIONS: LocationItem[] = [
     addressLines: resolveLocation2AddressLines(),
     cityState: 'Vadodara, Gujarat – 390006',
     phone: '+91 79902 34736',
-    coordinates: '22.3104840, 73.2442090',
-    mapsUrl: 'https://maps.app.goo.gl/3CzRKX4UssDLeFaEA',
+    coordinates: '22.305025, 73.210304',
+    mapsUrl: 'https://maps.google.com/?q=22.305025,73.210304',
     mapEmbedUrl:
-      'https://maps.google.com/maps?q=22.3104840,73.2442090&t=&z=16&ie=UTF8&iwloc=&output=embed',
+      'https://maps.google.com/maps?q=22.305025,73.210304&t=&z=16&ie=UTF8&iwloc=&output=embed',
     hours: 'Mon – Sun : 10:00 AM – 8:00 PM',
     badge: 'Branch 2 • Adaniyapul, Fatepura',
     schemaType: 'street-address',

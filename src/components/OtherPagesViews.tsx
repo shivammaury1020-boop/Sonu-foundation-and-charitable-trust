@@ -27,6 +27,8 @@ import {
   BUSINESS_CLAIMS_CONFIG,
   BUSINESS_INFO,
   COURSES,
+  ENQUIRY_CATEGORIES,
+  type EnquiryCategoryId,
   GALLERY_ITEMS,
   GalleryCategory,
   GalleryItem,
@@ -39,11 +41,13 @@ import {
 import {
   ContactMessageInput,
   ContactMessageRecord,
-  buildWhatsAppGeneralUrl,
+  buildCategoryEnquiryWhatsAppUrl,
+  getEnquiryCategoryConfig,
   submitContactMessageToServer,
   validateContactMessage,
 } from '../utils/bookingLogic';
 import { ConnectWithUsSection } from './ConnectWithUsSection';
+import { EnquiryCategoriesSection } from './EnquiryCategoriesSection';
 
 interface PageNavProps {
   onNavigate: (page: PageId, param?: string) => void;
@@ -693,6 +697,8 @@ export const ContactPageView: React.FC<{
   onNavigate: (page: PageId) => void;
   onSaveContactMessage: (record: ContactMessageRecord) => void;
 }> = ({ onNavigate, onSaveContactMessage }) => {
+  const [selectedEnquiryCategory, setSelectedEnquiryCategory] =
+    useState<EnquiryCategoryId>('trust');
   const [form, setForm] = useState<ContactMessageInput>({
     name: '',
     phone: '',
@@ -704,11 +710,23 @@ export const ContactPageView: React.FC<{
   const [savedRecord, setSavedRecord] = useState<ContactMessageRecord | null>(null);
   const [activeMapLocIndex, setActiveMapLocIndex] = useState<0 | 1>(0);
 
+  const activeCategoryConfig = getEnquiryCategoryConfig(selectedEnquiryCategory);
+
+  const handleSelectEnquiryCategory = (categoryId: EnquiryCategoryId) => {
+    setSelectedEnquiryCategory(categoryId);
+    setSavedRecord(null);
+    setError(null);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (isSubmitting) return;
     setError(null);
-    const check = validateContactMessage(form);
+    const payload: ContactMessageInput = {
+      ...form,
+      category: selectedEnquiryCategory,
+    };
+    const check = validateContactMessage(payload);
     if (!check.valid) {
       setError(check.error || 'Please check your form details.');
       return;
@@ -716,7 +734,10 @@ export const ContactPageView: React.FC<{
 
     setIsSubmitting(true);
     try {
-      const record = await submitContactMessageToServer(form);
+      const record = await submitContactMessageToServer({
+        ...payload,
+        message: `[${activeCategoryConfig.title}] ${form.message.trim()}`,
+      });
       onSaveContactMessage(record);
       setSavedRecord(record);
     } catch (err: unknown) {
@@ -743,9 +764,20 @@ export const ContactPageView: React.FC<{
             Contact Sonu’s Beauty Studio &amp; Academy
           </h1>
           <p className="text-sm sm:text-base text-[#6E6265] leading-relaxed">
-            Reach out directly for bridal artistry consultations, salon appointments, or beauty academy admissions in Vadodara.
+            Reach out directly for Foundation &amp; Charitable Trust initiatives, Beauty Academy courses, or Beauty Studio treatments and appointments in Vadodara.
           </p>
         </div>
+
+        <EnquiryCategoriesSection
+          variant="contact"
+          selectedCategory={selectedEnquiryCategory}
+          onSelectCategory={(categoryId) => {
+            handleSelectEnquiryCategory(categoryId);
+            document
+              .getElementById('contact-enquiry-form')
+              ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }}
+        />
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           {/* Left Column: Owner Portrait Card + Direct Contact Details */}
@@ -831,169 +863,223 @@ export const ContactPageView: React.FC<{
                 <button
                   type="button"
                   onClick={() => onNavigate('book')}
-                  className="flex-1 min-w-[160px] inline-flex items-center justify-center gap-2 bg-[#6B173D] hover:bg-[#4A0D29] text-white text-xs sm:text-sm font-semibold py-3 px-4 rounded-xl shadow-sm transition-colors cursor-pointer whitespace-nowrap"
+                  className="flex-1 min-w-[150px] inline-flex items-center justify-center gap-2 bg-[#6B173D] hover:bg-[#4A0D29] text-white text-xs sm:text-sm font-semibold py-3 px-4 rounded-xl shadow-sm transition-colors cursor-pointer whitespace-nowrap"
                 >
                   <Calendar className="w-4 h-4 text-[#E6C98F] shrink-0" />
                   <span>Book Appointment</span>
                 </button>
                 <a
-                  href={buildWhatsAppGeneralUrl(
-                    'Hello Sonu Foundation and Charitable Trust, I would like to get in touch.'
-                  )}
+                  href={buildCategoryEnquiryWhatsAppUrl('studio')}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex-1 min-w-[160px] inline-flex items-center justify-center gap-2 bg-[#FAF5EF] hover:bg-[#F3E9DF] text-[#4A0D29] border border-[#C8A15A]/50 text-xs sm:text-sm font-semibold py-3 px-4 rounded-xl transition-colors whitespace-nowrap"
+                  className="flex-1 min-w-[150px] inline-flex items-center justify-center gap-2 bg-[#FAF5EF] hover:bg-[#F3E9DF] text-[#4A0D29] border border-[#C8A15A]/50 text-xs sm:text-sm font-semibold py-3 px-4 rounded-xl transition-colors whitespace-nowrap"
                 >
                   <MessageCircle className="w-4 h-4 text-[#6B173D] shrink-0" />
-                  <span>Chat on WhatsApp</span>
+                  <span>WhatsApp Studio</span>
                 </a>
+                {BUSINESS_INFO.email && (
+                  <a
+                    href={`mailto:${BUSINESS_INFO.email}`}
+                    className="w-full inline-flex items-center justify-center gap-2 bg-white hover:bg-[#FAF5EF] text-[#201B1D] border border-[#C8A15A]/45 text-xs sm:text-sm font-semibold py-2.5 px-4 rounded-xl transition-colors"
+                  >
+                    <Mail className="w-4 h-4 text-[#6B173D] shrink-0" />
+                    <span>Email: {BUSINESS_INFO.email}</span>
+                  </a>
+                )}
               </div>
             </div>
           </div>
 
-          {/* Right Column: Contact Form + Studio Locations & Google Maps */}
+          {/* Right Column: Category-Synced Contact Enquiry Form + Studio Locations & Google Maps */}
           <div className="lg:col-span-7 space-y-6">
-            {savedRecord ? (
-              <div className="bg-white rounded-2xl p-8 border border-[#C8A15A]/45 shadow-sm text-center space-y-4">
-                <CheckCircle2 className="w-12 h-12 text-[#6B173D] mx-auto" />
-                <div className="text-xs font-semibold text-[#6B173D]">
-                  Saved to Database · Ref ID: {savedRecord.reference_id}
-                </div>
-                <h2 className="font-serif-luxury text-2xl font-bold text-[#201B1D]">
-                  Message Saved &amp; Received
-                </h2>
-                <p className="text-sm text-[#6E6265] max-w-md mx-auto">
-                  Thank you for contacting Sonu’s Beauty Studio &amp; Academy. Your message has been recorded in our database and our team will respond to your enquiry shortly.
-                </p>
-                <div className="flex flex-wrap justify-center gap-3 pt-2">
-                  <a
-                    href={buildWhatsAppGeneralUrl(
-                      `Hello Sonu Foundation and Charitable Trust, my name is ${savedRecord.name} (Ref: ${savedRecord.reference_id}). ${savedRecord.message}`
-                    )}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 bg-[#6B173D] hover:bg-[#4A0D29] text-white text-sm font-semibold px-6 py-3 rounded-xl transition-colors"
-                  >
-                    <MessageCircle className="w-4 h-4 text-[#E6C98F]" />
-                    <span>Also Send via WhatsApp</span>
-                  </a>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setSavedRecord(null);
-                      setForm({ name: '', phone: '', email: '', message: '' });
-                    }}
-                    className="px-5 py-3 rounded-xl border border-[#C8A15A]/45 text-sm font-medium text-[#201B1D] hover:bg-[#FAF5EF] transition-colors cursor-pointer"
-                  >
-                    Send Another Message
-                  </button>
-                </div>
-              </div>
-            ) : (
-              <form
-                onSubmit={handleSubmit}
-                noValidate
-                className="bg-white rounded-2xl p-6 sm:p-8 border border-[#C8A15A]/40 shadow-sm space-y-4"
-              >
-                <div>
+            <div id="contact-enquiry-form">
+              {savedRecord ? (
+                <div className="bg-white rounded-2xl p-8 border border-[#C8A15A]/45 shadow-sm text-center space-y-4">
+                  <CheckCircle2 className="w-12 h-12 text-[#6B173D] mx-auto" />
+                  <div className="text-xs font-semibold text-[#6B173D]">
+                    Saved to Database · {activeCategoryConfig.title} · Ref ID: {savedRecord.reference_id}
+                  </div>
                   <h2 className="font-serif-luxury text-2xl font-bold text-[#201B1D]">
-                    Send Us a Message
+                    Enquiry Saved &amp; Received
                   </h2>
-                  <p className="text-xs sm:text-sm text-[#6E6265] mt-1">
-                    Share your appointment request, bridal inquiry, or course question and our studio team will reply promptly.
+                  <p className="text-sm text-[#6E6265] max-w-md mx-auto">
+                    Thank you for contacting {activeCategoryConfig.businessName}. Your enquiry has been recorded in our database and our team will respond shortly.
                   </p>
-                </div>
-
-                {error && (
-                  <div
-                    role="alert"
-                    className="p-3.5 rounded-xl bg-[#6B173D]/10 border border-[#6B173D]/40 text-xs sm:text-sm text-[#4A0D29] flex items-center gap-2 font-medium"
-                  >
-                    <AlertCircle className="w-4 h-4 text-[#6B173D] shrink-0" />
-                    <span>{error}</span>
+                  <div className="flex flex-wrap justify-center gap-3 pt-2">
+                    <a
+                      href={buildCategoryEnquiryWhatsAppUrl(selectedEnquiryCategory, {
+                        name: savedRecord.name,
+                        phone: savedRecord.phone,
+                        message: savedRecord.message.replace(/^\[[^\]]+\]\s*/, ''),
+                        referenceId: savedRecord.reference_id,
+                      })}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 bg-[#6B173D] hover:bg-[#4A0D29] text-white text-sm font-semibold px-6 py-3 rounded-xl transition-colors"
+                    >
+                      <MessageCircle className="w-4 h-4 text-[#E6C98F]" />
+                      <span>{activeCategoryConfig.whatsappButtonLabel}</span>
+                    </a>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setSavedRecord(null);
+                        setForm({ name: '', phone: '', email: '', message: '' });
+                      }}
+                      className="px-5 py-3 rounded-xl border border-[#C8A15A]/45 text-sm font-medium text-[#201B1D] hover:bg-[#FAF5EF] transition-colors cursor-pointer"
+                    >
+                      Send Another Enquiry
+                    </button>
                   </div>
-                )}
+                </div>
+              ) : (
+                <form
+                  onSubmit={handleSubmit}
+                  noValidate
+                  className="bg-white rounded-2xl p-6 sm:p-8 border border-[#C8A15A]/40 shadow-sm space-y-4"
+                >
+                  <div className="space-y-3">
+                    <div>
+                      <span className="text-[11px] font-bold uppercase tracking-[0.16em] text-[#6B173D] block">
+                        {activeCategoryConfig.businessName}
+                      </span>
+                      <h2 className="font-serif-luxury text-2xl font-bold text-[#201B1D] mt-0.5">
+                        {activeCategoryConfig.formHeading}
+                      </h2>
+                      <p className="text-xs sm:text-sm text-[#6E6265] mt-1">
+                        Select your enquiry category below and submit your details or open WhatsApp with the dedicated prefilled message.
+                      </p>
+                    </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div
+                      className="grid grid-cols-1 sm:grid-cols-3 gap-2 p-1.5 rounded-xl bg-[#FAF5EF] border border-[#C8A15A]/35"
+                      role="tablist"
+                      aria-label="Enquiry Category"
+                    >
+                      {ENQUIRY_CATEGORIES.map((cat) => (
+                        <button
+                          key={cat.id}
+                          type="button"
+                          role="tab"
+                          aria-selected={selectedEnquiryCategory === cat.id}
+                          onClick={() => handleSelectEnquiryCategory(cat.id)}
+                          className={`px-3 py-2 rounded-lg text-xs font-semibold transition-colors cursor-pointer text-center ${
+                            selectedEnquiryCategory === cat.id
+                              ? 'bg-[#6B173D] text-white shadow-sm'
+                              : 'text-[#4A0D29] hover:bg-[#F3E9DF]'
+                          }`}
+                        >
+                          {cat.code}. {cat.shortTitle}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {error && (
+                    <div
+                      role="alert"
+                      className="p-3.5 rounded-xl bg-[#6B173D]/10 border border-[#6B173D]/40 text-xs sm:text-sm text-[#4A0D29] flex items-center gap-2 font-medium"
+                    >
+                      <AlertCircle className="w-4 h-4 text-[#6B173D] shrink-0" />
+                      <span>{error}</span>
+                    </div>
+                  )}
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label htmlFor="contact-name" className="block text-xs font-semibold text-[#201B1D] mb-1">
+                        Full Name *
+                      </label>
+                      <input
+                        id="contact-name"
+                        type="text"
+                        required
+                        placeholder="Your full name"
+                        value={form.name}
+                        onChange={(e) => setForm({ ...form, name: e.target.value })}
+                        className="w-full rounded-xl border border-[#C8A15A]/45 bg-[#FAF5EF] px-3.5 py-2.5 text-sm text-[#201B1D] focus:outline-none focus:border-[#6B173D]"
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="contact-phone" className="block text-xs font-semibold text-[#201B1D] mb-1">
+                        Phone Number *
+                      </label>
+                      <input
+                        id="contact-phone"
+                        type="tel"
+                        required
+                        placeholder="+91 98765 43210"
+                        value={form.phone}
+                        onChange={(e) => setForm({ ...form, phone: e.target.value })}
+                        className="w-full rounded-xl border border-[#C8A15A]/45 bg-[#FAF5EF] px-3.5 py-2.5 text-sm text-[#201B1D] focus:outline-none focus:border-[#6B173D]"
+                      />
+                    </div>
+                  </div>
+
                   <div>
-                    <label htmlFor="contact-name" className="block text-xs font-semibold text-[#201B1D] mb-1">
-                      Full Name *
+                    <label htmlFor="contact-email" className="block text-xs font-semibold text-[#201B1D] mb-1">
+                      Email Address (Optional)
                     </label>
                     <input
-                      id="contact-name"
-                      type="text"
-                      required
-                      placeholder="Your full name"
-                      value={form.name}
-                      onChange={(e) => setForm({ ...form, name: e.target.value })}
+                      id="contact-email"
+                      type="email"
+                      placeholder="you@example.com"
+                      value={form.email}
+                      onChange={(e) => setForm({ ...form, email: e.target.value })}
                       className="w-full rounded-xl border border-[#C8A15A]/45 bg-[#FAF5EF] px-3.5 py-2.5 text-sm text-[#201B1D] focus:outline-none focus:border-[#6B173D]"
                     />
                   </div>
+
                   <div>
-                    <label htmlFor="contact-phone" className="block text-xs font-semibold text-[#201B1D] mb-1">
-                      Phone Number *
+                    <label htmlFor="contact-message" className="block text-xs font-semibold text-[#201B1D] mb-1">
+                      Enquiry Details ({activeCategoryConfig.shortTitle}) *
                     </label>
-                    <input
-                      id="contact-phone"
-                      type="tel"
+                    <textarea
+                      id="contact-message"
+                      rows={4}
                       required
-                      placeholder="+91 98765 43210"
-                      value={form.phone}
-                      onChange={(e) => setForm({ ...form, phone: e.target.value })}
+                      placeholder={activeCategoryConfig.detailsPlaceholder}
+                      value={form.message}
+                      onChange={(e) => setForm({ ...form, message: e.target.value })}
                       className="w-full rounded-xl border border-[#C8A15A]/45 bg-[#FAF5EF] px-3.5 py-2.5 text-sm text-[#201B1D] focus:outline-none focus:border-[#6B173D]"
                     />
                   </div>
-                </div>
 
-                <div>
-                  <label htmlFor="contact-email" className="block text-xs font-semibold text-[#201B1D] mb-1">
-                    Email Address
-                  </label>
-                  <input
-                    id="contact-email"
-                    type="email"
-                    placeholder="you@example.com"
-                    value={form.email}
-                    onChange={(e) => setForm({ ...form, email: e.target.value })}
-                    className="w-full rounded-xl border border-[#C8A15A]/45 bg-[#FAF5EF] px-3.5 py-2.5 text-sm text-[#201B1D] focus:outline-none focus:border-[#6B173D]"
-                  />
-                </div>
-
-                <div>
-                  <label htmlFor="contact-message" className="block text-xs font-semibold text-[#201B1D] mb-1">
-                    Your Message *
-                  </label>
-                  <textarea
-                    id="contact-message"
-                    rows={4}
-                    required
-                    placeholder="How can we help you?"
-                    value={form.message}
-                    onChange={(e) => setForm({ ...form, message: e.target.value })}
-                    className="w-full rounded-xl border border-[#C8A15A]/45 bg-[#FAF5EF] px-3.5 py-2.5 text-sm text-[#201B1D] focus:outline-none focus:border-[#6B173D]"
-                  />
-                </div>
-
-                <div className="flex flex-wrap items-center gap-3 pt-1">
-                  <button
-                    type="submit"
-                    disabled={isSubmitting}
-                    className="inline-flex items-center gap-2 bg-[#6B173D] hover:bg-[#4A0D29] disabled:opacity-60 text-white text-sm font-semibold px-6 py-3 rounded-xl shadow-sm transition-colors cursor-pointer"
-                  >
-                    <Send className="w-4 h-4 text-[#E6C98F]" />
-                    <span>{isSubmitting ? 'Sending Message...' : 'Send Message'}</span>
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => onNavigate('courses')}
-                    className="inline-flex items-center gap-1.5 px-5 py-3 rounded-xl border border-[#C8A15A]/50 bg-[#FAF5EF] hover:bg-[#F3E9DF] text-xs sm:text-sm font-semibold text-[#4A0D29] transition-colors cursor-pointer"
-                  >
-                    <GraduationCap className="w-4 h-4 text-[#6B173D]" />
-                    <span>Explore Courses</span>
-                  </button>
-                </div>
-              </form>
-            )}
+                  <div className="flex flex-wrap items-center gap-3 pt-1">
+                    <button
+                      type="submit"
+                      disabled={isSubmitting}
+                      className="inline-flex items-center gap-2 bg-[#6B173D] hover:bg-[#4A0D29] disabled:opacity-60 text-white text-sm font-semibold px-6 py-3 rounded-xl shadow-sm transition-colors cursor-pointer"
+                    >
+                      <Send className="w-4 h-4 text-[#E6C98F]" />
+                      <span>
+                        {isSubmitting
+                          ? 'Sending Enquiry...'
+                          : `Submit ${activeCategoryConfig.shortTitle}`}
+                      </span>
+                    </button>
+                    <a
+                      href={buildCategoryEnquiryWhatsAppUrl(selectedEnquiryCategory)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 bg-[#FAF5EF] hover:bg-[#F3E9DF] text-[#4A0D29] border border-[#C8A15A]/50 text-xs sm:text-sm font-semibold px-5 py-3 rounded-xl transition-colors"
+                    >
+                      <MessageCircle className="w-4 h-4 text-[#6B173D]" />
+                      <span>{activeCategoryConfig.whatsappButtonLabel}</span>
+                    </a>
+                    {BUSINESS_INFO.email && (
+                      <a
+                        href={`mailto:${BUSINESS_INFO.email}?subject=${encodeURIComponent(activeCategoryConfig.title)}`}
+                        className="inline-flex items-center gap-1.5 px-4 py-3 rounded-xl border border-[#C8A15A]/45 bg-white hover:bg-[#FAF5EF] text-xs sm:text-sm font-medium text-[#201B1D] transition-colors"
+                      >
+                        <Mail className="w-4 h-4 text-[#6B173D]" />
+                        <span>Email Us</span>
+                      </a>
+                    )}
+                  </div>
+                </form>
+              )}
+            </div>
 
             {/* Studio Locations & Interactive Google Map */}
             <div className="bg-white rounded-2xl p-6 border border-[#C8A15A]/40 shadow-sm space-y-4">
@@ -1212,16 +1298,23 @@ export const FoundationPageView: React.FC<PageNavProps> = ({ onNavigate }) => {
           </div>
           <div className="flex flex-wrap items-center gap-3">
             <a
-              href={buildWhatsAppGeneralUrl(
-                'Hello Sonu Foundation and Charitable Trust, I would like to connect regarding your community and skill initiatives.'
-              )}
+              href={buildCategoryEnquiryWhatsAppUrl('trust')}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 bg-[#6B173D] hover:bg-[#4A0D29] text-white text-xs sm:text-sm font-semibold px-5 py-3 rounded-xl"
             >
               <MessageCircle className="w-4 h-4 text-[#E6C98F]" />
-              <span>Connect on WhatsApp</span>
+              <span>WhatsApp Trust Enquiry</span>
             </a>
+            {BUSINESS_INFO.email && (
+              <a
+                href={`mailto:${BUSINESS_INFO.email}`}
+                className="inline-flex items-center gap-2 bg-white hover:bg-[#FAF5EF] text-[#4A0D29] border border-[#C8A15A]/50 text-xs sm:text-sm font-semibold px-5 py-3 rounded-xl"
+              >
+                <Mail className="w-4 h-4 text-[#6B173D]" />
+                <span>Email Us</span>
+              </a>
+            )}
             <button
               type="button"
               onClick={() => onNavigate('contact')}

@@ -1262,10 +1262,19 @@ export const AdminDashboardView: React.FC<{
                     className="p-4 rounded-xl bg-[#FAF5EF] border border-[#C8A15A]/35 flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-xs sm:text-sm"
                   >
                     <div className="space-y-1">
-                      <div className="flex items-center gap-2">
+                      <div className="flex flex-wrap items-center gap-2">
                         <span className="font-mono font-bold text-[#6B173D]">
                           {msg.reference_id}
                         </span>
+                        {msg.category && (
+                          <span className="text-[11px] font-bold uppercase tracking-wide px-2 py-0.5 rounded bg-white text-[#6B173D] border border-[#C8A15A]/45">
+                            {msg.category === 'trust'
+                              ? 'Trust Enquiry'
+                              : msg.category === 'academy'
+                                ? 'Academy Enquiry'
+                                : 'Beauty Studio Enquiry'}
+                          </span>
+                        )}
                         <strong className="text-[#201B1D]">{msg.name}</strong>
                         <span className="text-xs text-[#6E6265] tabular-nums">
                           {msg.phone} {msg.email ? `· ${msg.email}` : ''}

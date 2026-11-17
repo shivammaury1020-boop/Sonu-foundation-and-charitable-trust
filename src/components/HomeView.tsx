@@ -35,8 +35,9 @@ import {
   VERIFIED_REVIEWS,
   WEBSITE_SERVICE_NAVIGATION,
 } from '../data/siteData';
-import { buildWhatsAppGeneralUrl } from '../utils/bookingLogic';
+import { buildCategoryEnquiryWhatsAppUrl } from '../utils/bookingLogic';
 import { ConnectWithUsSection } from './ConnectWithUsSection';
+import { EnquiryCategoriesSection } from './EnquiryCategoriesSection';
 
 interface HomeViewProps {
   onNavigate: (page: PageId, param?: string) => void;
@@ -916,10 +917,13 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate, onQuickBookStart
         </div>
       </section>
 
-      {/* 14. CONNECT WITH US (Official Social Media Profiles) */}
+      {/* 14. THREE SEPARATE ENQUIRY CATEGORIES (Trust, Academy & Beauty Studio) */}
+      <EnquiryCategoriesSection variant="home" showEmbeddedForm={true} />
+
+      {/* 15. CONNECT WITH US (Official Social Media Profiles) */}
       <ConnectWithUsSection variant="home" />
 
-      {/* 15. FINAL CTA SECTION */}
+      {/* 16. FINAL CTA SECTION */}
       <section className="py-14 sm:py-16 bg-gradient-to-r from-[#6B173D] via-[#581232] to-[#4A0D29] text-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-5">
           <h2 className="font-serif-luxury text-3xl sm:text-5xl font-bold text-[#FAF5EF] text-balance">
@@ -946,15 +950,13 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate, onQuickBookStart
               <span>Explore Our Programs</span>
             </button>
             <a
-              href={buildWhatsAppGeneralUrl(
-                'Hello Sonu Foundation and Charitable Trust, I would like to enquire about your community and skill development programs.'
-              )}
+              href={buildCategoryEnquiryWhatsAppUrl('trust')}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 bg-transparent hover:bg-white/10 text-[#E6C98F] border border-[#E6C98F]/40 text-sm sm:text-base font-medium px-6 py-3.5 rounded-xl transition-all"
             >
               <MessageCircle className="w-4 h-4" />
-              <span>Chat on WhatsApp</span>
+              <span>WhatsApp Trust Enquiry</span>
             </a>
           </div>
         </div>

@@ -28,7 +28,7 @@ import {
 import {
   CourseEnquiryInput,
   CourseEnquiryRecord,
-  buildWhatsAppGeneralUrl,
+  buildCategoryEnquiryWhatsAppUrl,
   submitCourseEnquiryToServer,
   validateCourseEnquiry,
 } from '../utils/bookingLogic';
@@ -89,21 +89,18 @@ export const CourseEnquiryFormBlock: React.FC<{
   };
 
   if (submittedRecord) {
-    const waText = [
-      'Hello Sonu Foundation and Charitable Trust,',
-      'I have submitted a course enquiry on your website.',
-      `Enquiry ID: ${submittedRecord.enquiry_id}`,
-      `Student Name: ${submittedRecord.name}`,
-      `Phone: ${submittedRecord.phone}`,
-      `WhatsApp: ${submittedRecord.whatsapp}`,
-      submittedRecord.email ? `Email: ${submittedRecord.email}` : '',
-      `Selected Course: ${submittedRecord.course}`,
-      `Preferred Location: ${submittedRecord.preferred_location}`,
-      submittedRecord.message ? `Message: ${submittedRecord.message}` : '',
-      'Please share course details. Thank you.',
-    ]
-      .filter(Boolean)
-      .join('\n');
+    const waUrl = buildCategoryEnquiryWhatsAppUrl('academy', {
+      name: submittedRecord.name,
+      phone: submittedRecord.phone,
+      referenceId: submittedRecord.enquiry_id,
+      message: [
+        `Selected Course: ${submittedRecord.course}`,
+        `Preferred Location: ${submittedRecord.preferred_location}`,
+        submittedRecord.message ? `Note: ${submittedRecord.message}` : '',
+      ]
+        .filter(Boolean)
+        .join(' | '),
+    });
 
     return (
       <div className="bg-white rounded-2xl p-6 sm:p-8 border border-[#C8A15A]/50 shadow-md text-center space-y-4">
@@ -114,11 +111,11 @@ export const CourseEnquiryFormBlock: React.FC<{
           Course Enquiry Submitted
         </h3>
         <p className="text-sm sm:text-base text-[#201B1D] font-medium max-w-lg mx-auto">
-          Thank you for your interest in Sonu Foundation and Charitable Trust. Our team will contact you about the course and training details.
+          Thank you for your interest in Sonu’s Beauty Studio &amp; Academy. Our academy team will contact you with the course details, fees, and batch timings.
         </p>
         <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
           <a
-            href={buildWhatsAppGeneralUrl(waText)}
+            href={waUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 bg-[#6B173D] hover:bg-[#4A0D29] text-white text-sm font-semibold px-6 py-3 rounded-xl shadow-sm transition-colors"
@@ -287,16 +284,12 @@ export const CourseEnquiryFormBlock: React.FC<{
         </button>
 
         <a
-          href={buildWhatsAppGeneralUrl(
-            [
-              'Hello Sonu Foundation and Charitable Trust,',
-              `I would like to enquire about the ${form.course}.`,
-              form.name ? `Student Name: ${form.name}` : '',
-              `Preferred Location: ${form.preferred_location}`,
-            ]
-              .filter(Boolean)
-              .join('\n')
-          )}
+          href={buildCategoryEnquiryWhatsAppUrl('academy', {
+            name: form.name,
+            message: form.course
+              ? `Course: ${form.course} (${form.preferred_location})`
+              : undefined,
+          })}
           target="_blank"
           rel="noopener noreferrer"
           className="inline-flex items-center gap-2 bg-[#FAF5EF] hover:bg-[#F3E9DF] text-[#4A0D29] border border-[#C8A15A]/50 text-sm font-semibold px-5 py-3 rounded-xl transition-colors"

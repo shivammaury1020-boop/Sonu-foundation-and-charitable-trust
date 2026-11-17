@@ -1,4 +1,13 @@
-import { BUSINESS_INFO, COURSES, LOCATIONS, SERVICES, TIME_SLOTS } from '../data/siteData.ts';
+import {
+  BUSINESS_INFO,
+  COURSES,
+  ENQUIRY_CATEGORIES,
+  type EnquiryCategoryConfig,
+  type EnquiryCategoryId,
+  LOCATIONS,
+  SERVICES,
+  TIME_SLOTS,
+} from '../data/siteData.ts';
 
 export type BookingStatus =
   | 'Pending Confirmation'
@@ -83,6 +92,7 @@ export interface ContactMessageInput {
   phone: string;
   email: string;
   message: string;
+  category?: EnquiryCategoryId;
 }
 
 export interface ContactMessageRecord extends ContactMessageInput {
@@ -530,6 +540,41 @@ export function buildWhatsAppBookingUrl(booking: {
 
 export function buildWhatsAppGeneralUrl(customMessage: string): string {
   return `https://wa.me/${BUSINESS_INFO.whatsappNumber}?text=${encodeURIComponent(customMessage)}`;
+}
+
+export function getEnquiryCategoryConfig(
+  categoryId: EnquiryCategoryId
+): EnquiryCategoryConfig {
+  return (
+    ENQUIRY_CATEGORIES.find((cat) => cat.id === categoryId) ||
+    ENQUIRY_CATEGORIES[0]
+  );
+}
+
+export function buildCategoryEnquiryWhatsAppUrl(
+  categoryId: EnquiryCategoryId,
+  details?: {
+    name?: string;
+    phone?: string;
+    message?: string;
+    referenceId?: string;
+  }
+): string {
+  const category = getEnquiryCategoryConfig(categoryId);
+  const extraLines = [
+    details?.name ? `Name: ${sanitizeInput(details.name)}` : '',
+    details?.phone ? `Phone: ${sanitizeInput(details.phone)}` : '',
+    details?.referenceId ? `Ref ID: ${sanitizeInput(details.referenceId)}` : '',
+    details?.message ? `Details: ${sanitizeInput(details.message)}` : '',
+  ].filter(Boolean);
+
+  if (extraLines.length === 0) {
+    return buildWhatsAppGeneralUrl(category.whatsappMessage);
+  }
+
+  return buildWhatsAppGeneralUrl(
+    `${category.whatsappMessage}\n\n${extraLines.join('\n')}`
+  );
 }
 
 export function validateCourseEnquiry(
